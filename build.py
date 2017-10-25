@@ -22,7 +22,7 @@ if __name__ == "__main__":
     os.environ["CONAN_UPLOAD"]="https://api.bintray.com/conan/{0}/public-conan".format(username)
     os.environ["CONAN_REMOTES"]="https://api.bintray.com/conan/conan-community/conan"
     builder = ConanMultiPackager(args="--build missing")
-    builder.add_common_builds(shared_option_name="cpprestsdk:shared")
+    builder.add_common_builds(shared_option_name=name+":shared")
     filtered_builds = []
     for settings, options, env_vars, build_requires in builder.builds:
         # XXX (uilian.ries): MTd could not link
