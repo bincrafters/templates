@@ -10,21 +10,17 @@ class LibnameConan(ConanFile):
     description = "Keep it short"
     license = "https://github.com/someauthor/somelib/blob/master/LICENSES"
     root = name + "-" + version
-
-    def requirements(self):
-        #use static org/channel for libs in conan-center
-        self.requires.add("OpenSSL/1.0.2l@conan/stable")
-        self.requires.add("zlib/1.2.11@conan/stable")
-        
-        #use dynamic org/channel for libs in bincrafters 
-        self.requires.add("websocketpp/0.7.0@%s/%s" % (self.user, self.channel))
+    #use static org/channel for libs in conan-center
+    #use dynamic org/channel for libs in bincrafters    
+    requires = "OpenSSL/1.0.2l@conan/stable", \
+        "zlib/1.2.11@conan/stable", \
+        "websocketpp/0.7.0@%s/%s" % (self.user, self.channel)
 
     def source(self):
         source_url = "https://github.com/Microsoft/cpprestsdk"
         tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
 
     def build(self):
-
         cmake = CMake(self)
         cmake.definitions["BUILD_TESTS"] = False
         cmake.configure()
