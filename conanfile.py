@@ -1,7 +1,6 @@
 from conans import ConanFile, tools
 import os
 
-
 class LibnameConan(ConanFile):
     name = "libname"
     version = "0.0.0"
