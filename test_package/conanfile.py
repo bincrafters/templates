@@ -10,7 +10,7 @@ class TestPackageConan(ConanFile):
         cmake = CMake(self)
         cmake.configure()
         cmake.build()
-        
+
     def test(self):
         with tools.environment_append(RunEnvironment(self).vars):
             if self.settings.os == "Windows":

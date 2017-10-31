@@ -1,4 +1,6 @@
-from conans import ConanFile, os, tools
+from conans import ConanFile, tools
+import os
+
 
 class LibnameConan(ConanFile):
     name = "libname"
@@ -11,7 +13,7 @@ class LibnameConan(ConanFile):
     license = "https://github.com/someauthor/somelib/blob/master/LICENSES"
     root = name + "-" + version
     #use static org/channel for libs in conan-center
-    #use dynamic org/channel for libs in bincrafters    
+    #use dynamic org/channel for libs in bincrafters
     requires = "OpenSSL/1.0.2l@conan/stable", \
         "zlib/1.2.11@conan/stable", \
         "websocketpp/0.7.0@%s/%s" % (self.user, self.channel)
