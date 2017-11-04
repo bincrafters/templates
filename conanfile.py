@@ -32,7 +32,7 @@ class LibnameConan(ConanFile):
         cmake.build()
 
     def package(self):
-        self.copy(pattern="LICENSE", dst="include", src="include")
+        self.copy(pattern="LICENSE")
         self.copy(pattern="*", dst="include", src="include")
         self.copy(pattern="*.dll", dst="bin", src="bin", keep_path=False)
         self.copy(pattern="*.lib", dst="lib", src="lib", keep_path=False)
