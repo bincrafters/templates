@@ -48,5 +48,5 @@ The following command both runs all the steps of the conan file, and publishes t
 
     $ conan upload somelib/0.0.0@bincrafters/stable --all -r bincrafters
 
-### License
-[LICENSE_TYPE](https://github.com/someauthor/somelib/blob/master/LICENSE)
+## License
+[LICENSE_TYPE](LICENSE)
