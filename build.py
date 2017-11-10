@@ -55,5 +55,5 @@ if __name__ == "__main__":
         upload_only_when_stable=True, 
         stable_branch_pattern="stable/*")
         
-    builder.add_common_builds()
+    builder.add_common_builds(shared_option_name=name + ":shared")
     builder.run()
