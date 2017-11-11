@@ -8,12 +8,12 @@ import os
 class LibnameConan(ConanFile):
     name = "libname"
     version = "0.0.0"
-    settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False]}
-    default_options = "shared=False"
     url = "https://github.com/bincrafters/conan-libname"
     description = "Keep it short"
     license = "https://github.com/someauthor/somelib/blob/master/LICENSES"
+    settings = "os", "arch", "compiler", "build_type"
+    options = {"shared": [True, False]}
+    default_options = "shared=False"
     #use static org/channel for libs in conan-center
     #use dynamic org/channel for libs in bincrafters
     requires = "OpenSSL/1.0.2l@conan/stable", \
