@@ -44,6 +44,4 @@ class LibnameConan(ConanFile):
             self.copy(pattern="*.dylib", dst="lib", src="lib", keep_path=False)
 
     def package_info(self):
-        tools.collect_libs(self)
-
-    
+        self.cpp_info.libs = tools.collect_libs(self)
