@@ -11,6 +11,7 @@ class LibnameConan(ConanFile):
     url = "https://github.com/bincrafters/conan-libname"
     description = "Keep it short"
     license = "https://github.com/someauthor/somelib/blob/master/LICENSES"
+    exports_sources = ["CMakeLists.txt", "LICENSE"]
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False]}
     default_options = "shared=False"
