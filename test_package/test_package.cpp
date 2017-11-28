@@ -1,6 +1,8 @@
-// #include <cpprest/json.h>
+#include <cstdlib>
+#include <iostream>
 
 int main()
 {
-    // const auto parsed_value = web::json::value::parse(U("-22"));
+    std::cout << "Bincrafters\n";
+    return EXIT_SUCCESS;
 }
