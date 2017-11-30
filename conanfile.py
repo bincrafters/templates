@@ -16,13 +16,16 @@ class LibnameConan(ConanFile):
     options = {"shared": [True, False]}
     default_options = "shared=False"
     #use static org/channel for libs in conan-center
-    #use dynamic org/channel for libs in bincrafters
-    requires = "OpenSSL/1.0.2l@conan/stable", \
-        "zlib/1.2.11@conan/stable", \
-        "websocketpp/0.7.0@%s/%s" % (self.user, self.channel)
+    #use version ranges for dependencies unless there's a reason not to
+    requires = "OpenSSL/[>=1.0.2l]@conan/stable", \
+        "zlib/[>=1.2.11]@conan/stable"
+        
+    def requirements(self):
+        #use dynamic org/channel for libs in bincrafters
+        self.requires.add("libuv/[>=1.15.0]@bincrafters/stable")
 
     def source(self):
-        source_url = "https://github.com/Microsoft/cpprestsdk"
+        source_url = "https://github.com/libauthor/libname"
         tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
         extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, "sources")
