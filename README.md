@@ -1,4 +1,4 @@
-[ ![Download](https://api.bintray.com/packages/bincrafters/public-conan/somelib%3Abincrafters/images/download.svg) ](https://bintray.com/bincrafters/public-conan/somelib%3Abincrafters/_latestVersion)
+[![Download](https://api.bintray.com/packages/bincrafters/public-conan/somelib%3Abincrafters/images/download.svg)](https://bintray.com/bincrafters/public-conan/somelib%3Abincrafters/_latestVersion)
 
 [Conan.io](https://conan.io) package for [somelib](https://github.com/someauthor/somelib) project
 
@@ -34,7 +34,7 @@ The example below shows the commands used to publish to bincrafters conan reposi
 
 This is a header only library, so nothing needs to be built.
 
-## Package 
+## Package
 
     $ conan create bincrafters/stable
 
