@@ -18,6 +18,8 @@ matrix:
       - <<: *linux
         env: CONAN_GCC_VERSIONS=6.3 CONAN_DOCKER_IMAGE=lasote/conangcc63
       - <<: *linux
+        env: CONAN_GCC_VERSIONS=7.2 CONAN_DOCKER_IMAGE=lasote/conangcc72
+      - <<: *linux
         env: CONAN_CLANG_VERSIONS=3.9 CONAN_DOCKER_IMAGE=lasote/conanclang39
       - <<: *linux
         env: CONAN_CLANG_VERSIONS=4.0 CONAN_DOCKER_IMAGE=lasote/conanclang40
