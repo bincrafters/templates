@@ -11,7 +11,7 @@ class LibnameConan(ConanFile):
     url = "https://github.com/bincrafters/conan-libname"
     description = "Keep it short"
     license = "https://github.com/someauthor/somelib/blob/master/LICENSES"
-    exports_sources = ["CMakeLists.txt", "LICENSE"]
+    exports_sources = ["CMakeLists.txt", "LICENSE.md"]
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False]}
     default_options = "shared=False"
@@ -19,7 +19,7 @@ class LibnameConan(ConanFile):
     #use version ranges for dependencies unless there's a reason not to
     requires = "OpenSSL/[>=1.0.2l]@conan/stable", \
         "zlib/[>=1.2.11]@conan/stable"
-        
+
     def requirements(self):
         #use dynamic org/channel for libs in bincrafters
         self.requires.add("libuv/[>=1.15.0]@bincrafters/stable")
@@ -39,7 +39,7 @@ class LibnameConan(ConanFile):
 
     def package(self):
         with tools.chdir("sources"):
-            self.copy(pattern="LICENSE")
+            self.copy("license*", dst="licenses",  ignore_case=True, keep_path=False)
             self.copy(pattern="*", dst="include", src="include")
             self.copy(pattern="*.dll", dst="bin", src="bin", keep_path=False)
             self.copy(pattern="*.lib", dst="lib", src="lib", keep_path=False)
