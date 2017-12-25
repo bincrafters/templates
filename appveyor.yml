@@ -1,5 +1,9 @@
 build: false
 
+configuration:
+  - Debug
+  - Release
+  
 environment:
     PYTHON: "C:\\Python27"
     PYTHON_VERSION: "2.7.8"
@@ -13,6 +17,9 @@ environment:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
           CONAN_VISUAL_VERSIONS: 15
 
+matrix:
+  fast_finish: true
+  
 install:
   - set PATH=%PATH%;%PYTHON%/Scripts/
   - pip.exe install conan --upgrade
