@@ -21,16 +21,32 @@ def get_name_from_recipe():
 def get_version_from_recipe():
     return get_value_from_recipe(r'''version\s*=\s*["'](\S*)["']''').groups()[0]
 
+
+def is_ci_running():
+    return os.getenv("APPVEYOR_REPO_NAME", "") or os.getenv("TRAVIS_REPO_SLUG", "")
+
+
+def get_repo_name_from_ci():
+    reponame_a = os.getenv("APPVEYOR_REPO_NAME","")
+    reponame_t = os.getenv("TRAVIS_REPO_SLUG","")
+    return reponame_a if reponame_a else reponame_t
+
+    
+def get_repo_branch_from_ci():
+    repobranch_a = os.getenv("APPVEYOR_REPO_BRANCH","")
+    repobranch_t = os.getenv("TRAVIS_BRANCH","")
+    return repobranch_a if repobranch_a else repobranch_t
+
     
 def get_ci_vars():
-    reponame_a = os.getenv("APPVEYOR_REPO_NAME","")
-    repobranch_a = os.getenv("APPVEYOR_REPO_BRANCH","")
-
-    reponame_t = os.getenv("TRAVIS_REPO_SLUG","")
-    repobranch_t = os.getenv("TRAVIS_BRANCH","")
-
-    username, _ = reponame_a.split("/") if reponame_a else reponame_t.split("/")
-    channel, version = repobranch_a.split("/") if repobranch_a else repobranch_t.split("/")
+    reponame = get_reponame_from_ci()
+    reponame_split = reponame.split("/")
+    
+    repobranch = get_repo_branch_from_ci()
+    repobranch_split = reponame.split("/")
+    
+    username, _ = reponame_split[0] if len(reponame_split) > 1 else ["",""]
+    channel, version = repobranch_split if len(repobranch_split) > 1 else ["",""]
     return username, channel, version
 
     
