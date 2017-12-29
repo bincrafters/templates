@@ -2,30 +2,35 @@
 # -*- coding: utf-8 -*-
 
 from conan.packager import ConanMultiPackager
-from conan import tools
+from conans import tools
 import os
 import re
 
+def get_module_location():
+    repo = os.getenv("CONAN_MODULE_REPO", "https://raw.githubusercontent.com/bincrafters/conan-templates")
+    branch = os.getenv("CONAN_MODULE_BRANCH", "package_tools_modules")
+    return repo + "/" + branch
+    
+def get_module_name():
+    return "build_shared"
+
+def get_module_filename():
+    return get_module_name() + ".py"
+    
+def get_module_url():
+    return get_module_location() + "/" + get_module_name() + ".py"
+    
+    
 def build():
-    import template_filename  # pylint: disable=F0401
-    build_bincrafters.build()
+    tools.download(get_module_url(), get_module_filename(), overwrite=True)
+    import build_shared  # pylint: disable=F0401
         
-        
-    name = get_name_from_recipe()
-    username, channel, version = get_env_vars()
-    reference = "{0}/{1}".format(name, version)
-    upload = "https://api.bintray.com/conan/{0}/public-conan".format(username)
+    package_name = build_shared.get_name_from_recipe()
+    
+    builder = build_shared.get_builder()
 
-    builder = ConanMultiPackager(
-        username=username,
-        channel=channel,
-        reference=reference,
-        upload=upload,
-        remotes=upload,  # while redundant, this moves bincrafters remote to position 0
-        upload_only_when_stable=True,
-        stable_branch_pattern="stable/*")
-
-    builder.add_common_builds(shared_option_name=name + ":shared")
+    builder.add()
+    
     builder.run()
 
     
