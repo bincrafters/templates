@@ -55,7 +55,7 @@ def get_version():
     return ci_ver if ci_ver else recipe_ver
     
     
-def get_env_vars():
+def get_conan_vars():
     username = os.getenv("CONAN_USERNAME", get_username())
     channel = os.getenv("CONAN_CHANNEL", get_channel())
     version = os.getenv("CONAN_VERSION", get_version())
