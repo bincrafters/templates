@@ -27,7 +27,7 @@ def build():
         
     package_name = build_shared.get_name_from_recipe()
     
-    builder = build_shared.get_builder(args=['--build', 'missing'])
+    builder = build_shared.get_builder(args=['--build=missing'])
 
     builder.add()
     
