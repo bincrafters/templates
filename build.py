@@ -58,6 +58,9 @@ if __name__ == "__main__":
     username, channel, version = get_env_vars()
     reference = "{0}/{1}".format(name, version)
     upload = "https://api.bintray.com/conan/{0}/public-conan".format(username)
+    upload_only_when_stable = True
+    if os.getenv('CONAN_UPLOAD_ONLY_WHEN_STABLE', '1') != '1':
+        upload_only_when_stable = False
 
     build = os.getenv("BUILD", None)
     if build:
@@ -72,7 +75,10 @@ if __name__ == "__main__":
         channel=os.getenv("CONAN_CHANNEL", channel),
         reference=os.getenv("CONAN_REFERENCE", reference),
         upload=os.getenv("CONAN_UPLOAD", upload),
-        remotes=os.getenv("CONAN_REMOTES", upload))
+        remotes=os.getenv("CONAN_REMOTES", upload),
+        upload_only_when_stable=upload_only_when_stable,
+        stable_branch_pattern=os.getenv("CONAN_STABLE_BRANCH_PATTERN", 'stable/*'))
 
-    builder.add_common_builds(shared_option_name="*:shared")
+    builder.add_common_builds(
+        shared_option_name=os.getenv('CONAN_SHARED_OPTION_NAME', name + ":shared"))
     builder.run()
