@@ -79,7 +79,7 @@ def get_conan_vars():
 
 
 def get_user_repository(username):
-    return "https://api.bintray.com/conan/{0}/public-conan".format(username)
+    return "https://api.bintray.com/conan/{0}/public-conan".format(username.lower())
 
 
 def get_conan_upload(username):
