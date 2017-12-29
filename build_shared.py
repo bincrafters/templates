@@ -82,7 +82,7 @@ def get_os():
     return platform.system().replace("Darwin", "Macos")
     
 
-def get_builder():
+def get_builder(args):
     name = get_name_from_recipe()
     username, channel, version = get_conan_vars()
     reference = "{0}/{1}".format(name, version)
@@ -92,6 +92,7 @@ def get_builder():
     stable_branch_pattern = os.getenv("CONAN_UPLOAD_ONLY_WHEN_STABLE", "stable/*")
 
     builder = ConanMultiPackager(
+        args=args,
         username=username,
         channel=channel,
         reference=reference,
