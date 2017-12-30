@@ -89,7 +89,7 @@ def get_builder(args=None):
     upload = "https://api.bintray.com/conan/{0}/public-conan".format(username)
     remotes = os.getenv("CONAN_REMOTES", upload)
     upload_when_stable = os.getenv("CONAN_UPLOAD_ONLY_WHEN_STABLE", 1)
-    stable_branch_pattern = os.getenv("CONAN_UPLOAD_ONLY_WHEN_STABLE", "stable/*")
+    stable_branch_pattern = os.getenv("CONAN_STABLE_BRANCH_PATTERN", "stable/*")
 
     builder = ConanMultiPackager(
         args=args,
