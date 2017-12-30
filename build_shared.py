@@ -93,6 +93,7 @@ def get_builder(args=None):
     reference = "{0}/{1}".format(name, version)
     upload = get_conan_upload(username)
     remotes = os.getenv("CONAN_REMOTES", upload)
+    print(remotes)
     upload_when_stable = os.getenv("CONAN_UPLOAD_ONLY_WHEN_STABLE", 1)
     stable_branch_pattern = os.getenv("CONAN_STABLE_BRANCH_PATTERN", "stable/*")
 
