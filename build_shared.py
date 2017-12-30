@@ -82,7 +82,7 @@ def get_os():
     return platform.system().replace("Darwin", "Macos")
     
 
-def get_builder(args):
+def get_builder(args=None):
     name = get_name_from_recipe()
     username, channel, version = get_conan_vars()
     reference = "{0}/{1}".format(name, version)
