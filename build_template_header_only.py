@@ -20,8 +20,7 @@ def get_module_filename():
     
 def get_module_url():
     return get_module_location() + "/" + get_module_filename()
-    
-    
+        
 def get_builder(args=None):
 
     tools.download(get_module_url(), get_module_filename(), overwrite=True)

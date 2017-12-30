@@ -20,8 +20,7 @@ def get_module_filename():
     
 def get_module_url():
     return get_module_location() + "/" + get_module_filename()
-    
-    
+        
 def build(args=None):
 
     # Override the default for boost
