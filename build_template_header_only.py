@@ -22,7 +22,7 @@ def get_module_url():
     return get_module_location() + "/" + get_module_filename()
     
     
-def build():
+def get_builder(args=None):
 
     tools.download(get_module_url(), get_module_filename(), overwrite=True)
 
@@ -30,10 +30,9 @@ def build():
     
     package_name = module.get_name_from_recipe()
     
-    builder = module.get_builder()
+    builder = module.get_builder(args)
 
     builder.add()
     
-    builder.run()
-
+    return builder
     
