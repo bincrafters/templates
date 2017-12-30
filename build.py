@@ -31,7 +31,7 @@ if __name__ == "__main__":
     
     module = importlib.import_module(get_module_name())
     
-    builder = module.get_builder(args)
+    builder = module.get_builder()
     
     builder.run()
 
