@@ -3,6 +3,7 @@
 
 from conan.packager import ConanMultiPackager
 from conans import tools
+import importlib
 import os
 import re
 
