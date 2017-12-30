@@ -30,7 +30,7 @@ def build():
     
     package_name = module.get_name_from_recipe()
     
-    builder = build_shared.get_builder()
+    builder = module.get_builder()
 
     builder.add()
     
