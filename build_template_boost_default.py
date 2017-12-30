@@ -21,7 +21,7 @@ def get_module_filename():
 def get_module_url():
     return get_module_location() + "/" + get_module_filename()
         
-def build(args=None):
+def get_builder(args=None):
 
     # Override the default for boost
     os.setenv("CONAN_UPLOAD_ONLY_WHEN_STABLE", 0)
