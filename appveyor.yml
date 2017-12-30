@@ -4,7 +4,6 @@ environment:
     PYTHON: "C:\\Python27"
     PYTHON_VERSION: "2.7.8"
     PYTHON_ARCH: "32"
-    BINCRAFTERS_TEMPLATE: "header-only"
 
     matrix:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
