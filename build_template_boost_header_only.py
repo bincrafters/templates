@@ -24,7 +24,7 @@ def get_module_url():
 def get_builder(args=None):
 
     # Override the default for boost
-    os.setenv("CONAN_UPLOAD_ONLY_WHEN_STABLE", 0)
+    os.putenv("CONAN_UPLOAD_ONLY_WHEN_STABLE", 0)
 
     tools.download(get_module_url(), get_module_filename(), overwrite=True)
 
