@@ -81,12 +81,17 @@ def get_conan_vars():
 def get_os():
     return platform.system().replace("Darwin", "Macos")
     
-
+    
+def get_conan_upload(username):
+    return os.getenv("CONAN_UPLOAD", 
+        "https://api.bintray.com/conan/{0}/public-conan".format(username))
+    
+    
 def get_builder(args=None):
     name = get_name_from_recipe()
     username, channel, version = get_conan_vars()
     reference = "{0}/{1}".format(name, version)
-    upload = "https://api.bintray.com/conan/{0}/public-conan".format(username)
+    upload = get_conan_upload(username)
     remotes = os.getenv("CONAN_REMOTES", upload)
     upload_when_stable = os.getenv("CONAN_UPLOAD_ONLY_WHEN_STABLE", 1)
     stable_branch_pattern = os.getenv("CONAN_STABLE_BRANCH_PATTERN", "stable/*")
