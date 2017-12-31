@@ -37,6 +37,4 @@ def get_builder(args=None):
 
     builder.add()
     
-    builder.run()
-
-    
+    return builder
