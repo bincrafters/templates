@@ -76,15 +76,20 @@ def get_conan_vars():
     channel = os.getenv("CONAN_CHANNEL", get_channel_from_ci())
     version = os.getenv("CONAN_VERSION", get_version())
     return username, channel, version
-
-
-def get_os():
-    return platform.system().replace("Darwin", "Macos")
     
     
 def get_conan_upload(username):
     return os.getenv("CONAN_UPLOAD", 
         "https://api.bintray.com/conan/{0}/public-conan".format(username))
+    
+    
+def get_upload_when_stable():
+    env_value = os.getenv("CONAN_UPLOAD_ONLY_WHEN_STABLE")
+    return  True if env_value == None else env_value
+    
+    
+def get_os():
+    return platform.system().replace("Darwin", "Macos")
     
     
 def get_builder(args=None):
@@ -93,9 +98,8 @@ def get_builder(args=None):
     reference = "{0}/{1}".format(name, version)
     upload = get_conan_upload(username)
     remotes = os.getenv("CONAN_REMOTES", upload)
-    upload_when_stable = os.getenv("CONAN_UPLOAD_ONLY_WHEN_STABLE", 1)
+    upload_when_stable = get_upload_when_stable()
     stable_branch_pattern = os.getenv("CONAN_STABLE_BRANCH_PATTERN", "stable/*")
-
     builder = ConanMultiPackager(
         args=args,
         username=username,

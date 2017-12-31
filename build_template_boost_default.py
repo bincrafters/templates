@@ -23,9 +23,10 @@ def get_module_url():
         
 def get_builder(args=None):
 
-    # Override the default for boost
-    os.putenv("CONAN_UPLOAD_ONLY_WHEN_STABLE", 0)
-
+    # Bincrafters default is to upload only when stable, but boost is an exception
+    # Empty string allows boost packages upload for testing branch
+    os.environ["CONAN_UPLOAD_ONLY_WHEN_STABLE"] = ""
+    
     tools.download(get_module_url(), get_module_filename(), overwrite=True)
 
     module = importlib.import_module(get_module_name())
