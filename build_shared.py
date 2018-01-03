@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from conan.packager import ConanMultiPackager
+from conan.packager import ConanMultiPackager, split_colon_env
 import os
 import re
 import platform
@@ -76,13 +76,32 @@ def get_conan_vars():
     channel = os.getenv("CONAN_CHANNEL", get_channel_from_ci())
     version = os.getenv("CONAN_VERSION", get_version())
     return username, channel, version
-    
-    
+
+
+def get_user_repository(username):
+    return "https://api.bintray.com/conan/{0}/public-conan".format(username)
+
+
 def get_conan_upload(username):
-    return os.getenv("CONAN_UPLOAD", 
-        "https://api.bintray.com/conan/{0}/public-conan".format(username))
-    
-    
+    return os.getenv("CONAN_UPLOAD", get_user_repository(username))
+
+
+def get_conan_remotes(username):
+    # If the user supplied remotes manually we give them priority
+    # e.g. maybe the user is trying to override the upload or the bincrafters repo.
+    remotes = split_colon_env("CONAN_REMOTES")
+
+    # While redundant, this moves upload remote to position 0 (except for CONAN_REMOTES env var).
+    remotes.append(get_conan_upload(username))
+
+    # Add bincrafters repository for other users, e.g. if the package would
+    # require other packages from the bincrafters repo.
+    bincrafters_user = "bincrafters"
+    if username != bincrafters_user:
+        remotes.append(get_user_repository(bincrafters_user))
+    return remotes
+
+
 def get_upload_when_stable():
     env_value = os.getenv("CONAN_UPLOAD_ONLY_WHEN_STABLE")
     return  True if env_value == None else env_value
@@ -97,7 +116,7 @@ def get_builder(args=None):
     username, channel, version = get_conan_vars()
     reference = "{0}/{1}".format(name, version)
     upload = get_conan_upload(username)
-    remotes = os.getenv("CONAN_REMOTES", upload)
+    remotes = get_conan_remotes(username)
     upload_when_stable = get_upload_when_stable()
     stable_branch_pattern = os.getenv("CONAN_STABLE_BRANCH_PATTERN", "stable/*")
     builder = ConanMultiPackager(
@@ -106,7 +125,7 @@ def get_builder(args=None):
         channel=channel,
         reference=reference,
         upload=upload,
-        remotes=remotes,  
+        remotes=remotes,
         upload_only_when_stable=upload_when_stable,
         stable_branch_pattern=stable_branch_pattern)
 
