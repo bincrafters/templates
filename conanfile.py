@@ -27,8 +27,8 @@ class LibnameConan(ConanFile):
     default_options = "shared=False"
     
     # Custom attributes for Bincrafters recipe conventions
-    source_folder = "source_folder"
-    build_folder = "build_folder"
+    source_subfolder = "source_subfolder"
+    build_subfolder = "build_subfolder"
     
     # Use version ranges for dependencies unless there's a reason not to
     requires = (
@@ -41,24 +41,21 @@ class LibnameConan(ConanFile):
         tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
         extracted_dir = self.name + "-" + self.version
 
-        #Rename to "source_folder" is a convention to simplify later steps
-        os.rename(extracted_dir, self.source_folder)
-
-        # Helper method for common CMake configurations
-        wrap_cmake()
+        #Rename to "source_subfolder" is a convention to simplify later steps
+        os.rename(extracted_dir, self.source_subfolder)
 
         
     def build(self):
         cmake = CMake(self)
         cmake.definitions["BUILD_TESTS"] = False # example
-        cmake.configure(source_folder=self.source_folder, build_folder=self.build_folder)
+        cmake.configure(build_folder=self.build_subfolder)
         cmake.build()
         cmake.install()
         
     def package(self):
         # If the CMakeLists.txt has a proper install method, the steps below may be redundant
         # If so, you can replace all the steps below with the word "pass"
-        include_folder = os.path.join(self.source_folder, "include")
+        include_folder = os.path.join(self.source_subfolder, "include")
         self.copy(pattern="LICENSE")
         self.copy(pattern="*", dst="include", src=include_folder)
         self.copy(pattern="*.dll", dst="bin", keep_path=False)
@@ -70,12 +67,3 @@ class LibnameConan(ConanFile):
         
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
-
-        
-    # Helper method for common CMake configurations
-    def wrap_cmake(self):
-        with tools.chdir(self.source_folder):
-            os.rename("CMakeLists.txt", "CMakeListsOriginal.txt")
-        
-        cmake_wrapper_new = os.path.join(self.source_folder, "CMakeLists.txt")
-        os.rename("CMakeLists.txt", cmake_wrapper_new)
