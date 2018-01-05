@@ -18,7 +18,7 @@ class LibnameConan(ConanFile):
     exports = ["LICENSE.md"]
     
     # Custom attributes for Bincrafters recipe conventions
-    source_folder = "source_folder"
+    source_subfolder = "source_subfolder"
     
     def source(self):
         source_url = "https://github.com/libauthor/libname"
@@ -26,11 +26,11 @@ class LibnameConan(ConanFile):
         extracted_dir = self.name + "-" + self.version
 
         #Rename to "source_folder" is a convention to simplify later steps
-        os.rename(extracted_dir, self.source_folder)
+        os.rename(extracted_dir, self.source_subfolder)
 
 
     def package(self):
-        include_folder = os.path.join(self.source_folder, "include")
+        include_folder = os.path.join(self.source_subfolder, "include")
         self.copy(pattern="LICENSE")
         self.copy(pattern="*", dst="include", src=include_folder)
 
