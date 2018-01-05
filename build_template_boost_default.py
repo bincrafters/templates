@@ -35,6 +35,6 @@ def get_builder(args=None):
     
     builder = module.get_builder(args)
 
-    builder.add()
+    builder.add_common_builds()
     
     return builder
