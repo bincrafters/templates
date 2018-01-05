@@ -17,9 +17,13 @@ def get_value_from_recipe(search_string):
 def get_name_from_recipe():
     return get_value_from_recipe(r'''name\s*=\s*["'](\S*)["']''').groups()[0]
 
-    
+
 def get_version_from_recipe():
     return get_value_from_recipe(r'''version\s*=\s*["'](\S*)["']''').groups()[0]
+
+
+def is_shared():
+    return "shared" in get_value_from_recipe(r'''options\s*=\s*(.*)''').groups()[0]
 
 
 def is_ci_running():
@@ -31,67 +35,67 @@ def get_repo_name_from_ci():
     reponame_t = os.getenv("TRAVIS_REPO_SLUG","")
     return reponame_a if reponame_a else reponame_t
 
-    
+
 def get_repo_branch_from_ci():
     repobranch_a = os.getenv("APPVEYOR_REPO_BRANCH","")
     repobranch_t = os.getenv("TRAVIS_BRANCH","")
     return repobranch_a if repobranch_a else repobranch_t
 
-    
+
 def get_ci_vars():
     reponame = get_repo_name_from_ci()
     reponame_split = reponame.split("/")
-    
+
     repobranch = get_repo_branch_from_ci()
     repobranch_split = repobranch.split("/")
-    
+
     username, _ = reponame_split if len(reponame_split) > 1 else ["",""]
     channel, version = repobranch_split if len(repobranch_split) > 1 else ["",""]
     return username, channel, version
 
-    
-def get_username_from_ci(): 
+
+def get_username_from_ci():
     username, _, _ = get_ci_vars()
     return username
-   
-   
-def get_channel_from_ci(): 
+
+
+def get_channel_from_ci():
     _, channel, _ = get_ci_vars()
     return channel
-   
-   
-def get_version_from_ci(): 
+
+
+def get_version_from_ci():
     _, _, version = get_ci_vars()
     return version
-    
+
 
 def get_version():
     ci_ver = get_version_from_ci()
     recipe_ver = get_version_from_recipe()
     return ci_ver if ci_ver else recipe_ver
-    
-    
+
+
 def get_conan_vars():
-    username = os.getenv("CONAN_USERNAME", get_username_from_ci())
+    username = os.getenv("CONAN_USERNAME", get_username_from_ci() or "bincrafters")
     channel = os.getenv("CONAN_CHANNEL", get_channel_from_ci())
     version = os.getenv("CONAN_VERSION", get_version())
     return username, channel, version
-    
-    
+
+
 def get_conan_upload(username):
-    return os.getenv("CONAN_UPLOAD", 
+    return os.getenv("CONAN_UPLOAD",
         "https://api.bintray.com/conan/{0}/public-conan".format(username))
-    
-    
+
+
 def get_upload_when_stable():
     env_value = os.getenv("CONAN_UPLOAD_ONLY_WHEN_STABLE")
     return  True if env_value == None else env_value
-    
-    
+
+
 def get_os():
     return platform.system().replace("Darwin", "Macos")
-    
-    
+
+
 def get_builder(args=None):
     name = get_name_from_recipe()
     username, channel, version = get_conan_vars()
@@ -106,7 +110,7 @@ def get_builder(args=None):
         channel=channel,
         reference=reference,
         upload=upload,
-        remotes=remotes,  
+        remotes=remotes,
         upload_only_when_stable=upload_when_stable,
         stable_branch_pattern=stable_branch_pattern)
 
