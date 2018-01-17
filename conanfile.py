@@ -31,8 +31,9 @@ class LibnameConan(ConanFile):
 
     def package(self):
         include_folder = os.path.join(self.source_subfolder, "include")
-        self.copy(pattern="LICENSE")
+        self.copy(pattern="LICENSE", dst="license")
         self.copy(pattern="*", dst="include", src=include_folder)
 
+        
     def package_id(self):
         self.info.header_only()
