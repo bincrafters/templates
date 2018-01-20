@@ -9,17 +9,19 @@ class LibnameConan(ConanFile):
     name = "libname"
     version = "0.0.0"
     url = "https://github.com/bincrafters/conan-libname"
+    author = "Bincrafters <bincrafters@gmail.com>"
     description = "Keep it short"
-    
+    no_copy_source = True
+
     # Indicates License type of the packaged library
     license = "MIT"
-    
+
     # Packages the license for the conanfile.py
     exports = ["LICENSE.md"]
-    
+
     # Custom attributes for Bincrafters recipe conventions
     source_subfolder = "source_subfolder"
-    
+
     def source(self):
         source_url = "https://github.com/libauthor/libname"
         tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
@@ -31,9 +33,9 @@ class LibnameConan(ConanFile):
 
     def package(self):
         include_folder = os.path.join(self.source_subfolder, "include")
-        self.copy(pattern="LICENSE", dst="license")
+        self.copy(pattern="LICENSE", dst="license", src=self.source_subfolder)
         self.copy(pattern="*", dst="include", src=include_folder)
 
-        
+
     def package_id(self):
         self.info.header_only()
