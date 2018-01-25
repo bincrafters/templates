@@ -1,0 +1,27 @@
+version: 2
+.conan-steps: &conan-steps
+  steps:
+    - checkout
+    - run:
+        name: Update Conan package
+        command: |
+          chmod +x .circleci/install.sh
+          .circleci/install.sh
+    - run:
+        name: Build recipe
+        command: |
+          chmod +x .circleci/run.sh
+          .circleci/run.sh
+jobs:
+  xcode9:
+    macos:
+      xcode: "9.0"
+    environment:
+      - CONAN_APPLE_CLANG_VERSIONS: "9.0"
+    <<: *conan-steps
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - xcode9

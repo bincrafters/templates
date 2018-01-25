@@ -5,9 +5,6 @@ linux: &linux
    python: "3.6"
    services:
      - docker
-osx: &osx
-   os: osx
-   language: generic
 matrix:
    include:
       - <<: *linux
@@ -22,15 +19,6 @@ matrix:
         env: CONAN_CLANG_VERSIONS=3.9 CONAN_DOCKER_IMAGE=lasote/conanclang39
       - <<: *linux
         env: CONAN_CLANG_VERSIONS=4.0 CONAN_DOCKER_IMAGE=lasote/conanclang40
-      - <<: *osx
-        osx_image: xcode7.3
-        env: CONAN_APPLE_CLANG_VERSIONS=7.3
-      - <<: *osx
-        osx_image: xcode8.3
-        env: CONAN_APPLE_CLANG_VERSIONS=8.1
-      - <<: *osx
-        osx_image: xcode9
-        env: CONAN_APPLE_CLANG_VERSIONS=9.0
 
 install:
   - chmod +x .travis/install.sh
