@@ -1,6 +1,6 @@
 ## Package Status
 
-| Bintray | Windows | Linux | OSX |
+| Bintray | Windows | Linux | Macos |
 |---------|------------|--------|------|
 |BINTRAY_BADGE_URL|APPVEYOR_BADGE_URL|TRAVIS_BADGE_URL|CIRCLE_CI_URL|
 
