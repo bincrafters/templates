@@ -31,9 +31,12 @@ class LibnameConan(ConanFile):
     build_subfolder = "build_subfolder"
 
     # Use version ranges for dependencies unless there's a reason not to
+    # Update 2/9/18 - Per conan team, ranges are slow to resolve.
+    # So, with libs like zlib, updates are very rare, so we now use static version
+    
     requires = (
         "OpenSSL/[>=1.0.2l]@conan/stable",
-        "zlib/[>=1.2.11]@conan/stable"
+        "zlib/1.2.11@conan/stable"
     )
 
     def source(self):
