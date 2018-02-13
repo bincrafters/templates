@@ -34,7 +34,7 @@ class LibnameConan(ConanFile):
     # Use version ranges for dependencies unless there's a reason not to
     # Update 2/9/18 - Per conan team, ranges are slow to resolve.
     # So, with libs like zlib, updates are very rare, so we now use static version
-    
+
     requires = (
         "OpenSSL/[>=1.0.2l]@conan/stable",
         "zlib/1.2.11@conan/stable"
@@ -47,7 +47,6 @@ class LibnameConan(ConanFile):
 
         #Rename to "source_subfolder" is a convention to simplify later steps
         os.rename(extracted_dir, self.source_subfolder)
-
 
     def build(self):
         cmake = CMake(self)
@@ -67,7 +66,6 @@ class LibnameConan(ConanFile):
         self.copy(pattern="*.a", dst="lib", keep_path=False)
         self.copy(pattern="*.so*", dst="lib", keep_path=False)
         self.copy(pattern="*.dylib", dst="lib", keep_path=False)
-
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
