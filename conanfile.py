@@ -24,8 +24,8 @@ class LibnameConan(ConanFile):
 
     # Options may need to change depending on the packaged library.
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False]}
-    default_options = "shared=False"
+    options = {"shared": [True, False], "fPIC": [True, False]}
+    default_options = "shared=False", "fPIC=True"
 
     # Custom attributes for Bincrafters recipe conventions
     source_subfolder = "source_subfolder"
@@ -40,6 +40,10 @@ class LibnameConan(ConanFile):
         "zlib/1.2.11@conan/stable"
     )
 
+    def configure(self):
+        if self.settings.compiler == 'Visual Studio':
+            del self.options.fPIC
+
     def source(self):
         source_url = "https://github.com/libauthor/libname"
         tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
@@ -51,6 +55,8 @@ class LibnameConan(ConanFile):
     def build(self):
         cmake = CMake(self)
         cmake.definitions["BUILD_TESTS"] = False # example
+        if self.settings.compiler != 'Visual Studio':
+            cmake.definitions['CMAKE_POSITION_INDEPENDENT_CODE'] = self.options.fPIC
         cmake.configure(build_folder=self.build_subfolder)
         cmake.build()
         cmake.install()
