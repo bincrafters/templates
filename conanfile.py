@@ -41,7 +41,7 @@ class LibnameConan(ConanFile):
     )
 
     def configure(self):
-        if self.settings.compiler == 'Visual Studio':
+        if self.settings.os == 'Windows':
             del self.options.fPIC
 
     def source(self):
@@ -55,7 +55,7 @@ class LibnameConan(ConanFile):
     def build(self):
         cmake = CMake(self)
         cmake.definitions["BUILD_TESTS"] = False # example
-        if self.settings.compiler != 'Visual Studio':
+        if self.settings.os != 'Windows':
             cmake.definitions['CMAKE_POSITION_INDEPENDENT_CODE'] = self.options.fPIC
         cmake.configure(build_folder=self.build_subfolder)
         cmake.build()
