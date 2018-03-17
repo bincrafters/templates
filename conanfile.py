@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
 
 from conans import ConanFile, CMake, tools
 import os
@@ -9,9 +8,10 @@ import os
 class LibnameConan(ConanFile):
     name = "libname"
     version = "0.0.0"
-    url = "https://github.com/bincrafters/conan-libname"
     description = "Keep it short"
-
+    url = "https://github.com/bincrafters/conan-libname"
+    homepage = "https://github.com/original_author/original_lib" 
+    
     # Indicates License type of the packaged library
     license = "MIT"
 
@@ -34,7 +34,8 @@ class LibnameConan(ConanFile):
     # Use version ranges for dependencies unless there's a reason not to
     # Update 2/9/18 - Per conan team, ranges are slow to resolve.
     # So, with libs like zlib, updates are very rare, so we now use static version
-
+    
+    
     requires = (
         "OpenSSL/[>=1.0.2l]@conan/stable",
         "zlib/1.2.11@conan/stable"
@@ -52,20 +53,25 @@ class LibnameConan(ConanFile):
         #Rename to "source_subfolder" is a convention to simplify later steps
         os.rename(extracted_dir, self.source_subfolder)
 
-    def build(self):
+    def configure_cmake(self):
         cmake = CMake(self)
         cmake.definitions["BUILD_TESTS"] = False # example
         if self.settings.os != 'Windows':
             cmake.definitions['CMAKE_POSITION_INDEPENDENT_CODE'] = self.options.fPIC
         cmake.configure(build_folder=self.build_subfolder)
+        return cmake
+
+    def build(self):
+        cmake = self.configure_cmake()
         cmake.build()
-        cmake.install()
 
     def package(self):
-        # If the CMakeLists.txt has a proper install method, the steps below may be redundant
-        # If so, you can replace all the steps below with the word "pass"
-        include_folder = os.path.join(self.source_subfolder, "include")
         self.copy(pattern="LICENSE", dst="license", src=self.source_subfolder)
+        cmake = self.configure_cmake()
+        cmake.install()
+        # If the CMakeLists.txt has a proper install method, the steps below may be redundant
+        # If so, you can just remove the lines below
+        include_folder = os.path.join(self.source_subfolder, "include")
         self.copy(pattern="*", dst="include", src=include_folder)
         self.copy(pattern="*.dll", dst="bin", keep_path=False)
         self.copy(pattern="*.lib", dst="lib", keep_path=False)
