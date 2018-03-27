@@ -10,8 +10,8 @@ class LibnameConan(ConanFile):
     version = "0.0.0"
     description = "Keep it short"
     url = "https://github.com/bincrafters/conan-libname"
-    homepage = "https://github.com/original_author/original_lib" 
-    
+    homepage = "https://github.com/original_author/original_lib"
+
     # Indicates License type of the packaged library
     license = "MIT"
 
@@ -34,14 +34,14 @@ class LibnameConan(ConanFile):
     # Use version ranges for dependencies unless there's a reason not to
     # Update 2/9/18 - Per conan team, ranges are slow to resolve.
     # So, with libs like zlib, updates are very rare, so we now use static version
-    
-    
+
+
     requires = (
         "OpenSSL/[>=1.0.2l]@conan/stable",
         "zlib/1.2.11@conan/stable"
     )
 
-    def configure(self):
+    def config_options(self):
         if self.settings.os == 'Windows':
             del self.options.fPIC
 
