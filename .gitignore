@@ -41,3 +41,4 @@ tmp/
 .project
 .pydevproject
 .settings/*
+.ropeproject/*
