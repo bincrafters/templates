@@ -66,7 +66,7 @@ class LibnameConan(ConanFile):
         cmake.build()
 
     def package(self):
-        self.copy(pattern="LICENSE", dst="license", src=self.source_subfolder)
+        self.copy(pattern="LICENSE", dst="licenses", src=self.source_subfolder)
         cmake = self.configure_cmake()
         cmake.install()
         # If the CMakeLists.txt has a proper install method, the steps below may be redundant
