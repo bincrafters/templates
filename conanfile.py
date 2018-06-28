@@ -11,7 +11,7 @@ class LibnameConan(ConanFile):
     description = "Keep it short"
     url = "https://github.com/bincrafters/conan-libname"
     homepage = "https://github.com/original_author/original_lib"
-
+    author = "Bincrafters <bincrafters@gmail.com>"
     # Indicates License type of the packaged library
     license = "MIT"
 
