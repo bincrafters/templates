@@ -173,9 +173,9 @@ test_script:
         apple_clang_builds = split_travis(apple_clang_builds, 'CONAN_BUILD_TYPES', ['Release', 'Debug'])
 
     if args.split_arch:
-        msvc_builds = split_appveyor(msvc_builds, 'CONAN_ACHS', ['x86', 'x86_64'])
-        gcc_builds = split_travis(gcc_builds, 'CONAN_ACHS', ['x86', 'x86_64'])
-        clang_builds = split_travis(clang_builds, 'CONAN_ACHS', ['x86', 'x86_64'])
+        msvc_builds = split_appveyor(msvc_builds, 'CONAN_ARCHS', ['x86', 'x86_64'])
+        gcc_builds = split_travis(gcc_builds, 'CONAN_ARCHS', ['x86', 'x86_64'])
+        clang_builds = split_travis(clang_builds, 'CONAN_ARCHS', ['x86', 'x86_64'])
         # NOTE : Apple Clang is intentionally omitted, as we build only x86_64 for OSX
 
     if args.split_visual_runtime:
