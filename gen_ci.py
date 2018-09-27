@@ -106,7 +106,7 @@ test_script:
         xcode_images = {'7.3': 'xcode7.3',
                         '8.1': 'xcode8.3',
                         '9.0': 'xcode9',
-                        '9.1': 'xcode9.4'
+                        '9.1': 'xcode9.4',
                         '10.0': 'xcode10'}
         apple_clang_template = """      - <<: *osx
         osx_image: {image}
