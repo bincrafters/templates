@@ -149,7 +149,7 @@ test_script:
 
     gcc_versions = args.gcc_versions or ['4.9', '5', '6', '7', '8']
     clang_versions = args.clang_versions or ['3.9', '4.0', '5.0', '6.0']
-    apple_clang_versions = args.apple_clang_versions or ['7.3', '8.1', '9.0', '9.1']
+    apple_clang_versions = args.apple_clang_versions or ['7.3', '8.1', '9.0', '9.1', '10.0']
     msvc_versions = args.msvc_versions or ['12', '14', '15']
 
     gcc_builds = [format_gcc_build(v) for v in gcc_versions]
