@@ -1,0 +1,43 @@
+jobs:
+- job: Linux
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.6'
+  - script: |
+      pip install --upgrade pip
+      chmod +x .ci/install.sh
+      ./.ci/install.sh
+      chmod +x .ci/run.sh
+      ./.ci/run.sh
+  strategy:
+    matrix:
+      GCC4.9:
+        CONAN_GCC_VERSIONS: 4.9
+        CONAN_DOCKER_IMAGE: lasote/conangcc49
+      GCC5:
+        CONAN_GCC_VERSIONS: 5
+        CONAN_DOCKER_IMAGE: lasote/conangcc5
+      GCC6:
+        CONAN_GCC_VERSIONS: 6
+        CONAN_DOCKER_IMAGE: lasote/conangcc6
+      GCC7:
+        CONAN_GCC_VERSIONS: 7
+        CONAN_DOCKER_IMAGE: lasote/conangcc7
+      GCC8:
+        CONAN_GCC_VERSIONS: 8
+        CONAN_DOCKER_IMAGE: lasote/conangcc8
+      CLANG3.9:
+        CONAN_CLANG_VERSIONS: 3.9
+        CONAN_DOCKER_IMAGE: lasote/conanclang39
+      CLANG4.0:
+        CONAN_CLANG_VERSIONS: 4.0
+        CONAN_DOCKER_IMAGE: lasote/conanclang40
+      CLANG5.0:
+        CONAN_CLANG_VERSIONS: 5.0
+        CONAN_DOCKER_IMAGE: lasote/conanclang50
+      CLANG6.0:
+        CONAN_CLANG_VERSIONS: 6.0
+        CONAN_DOCKER_IMAGE: lasote/conanclang60
