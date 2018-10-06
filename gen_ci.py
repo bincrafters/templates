@@ -29,6 +29,10 @@ def main():
                         help='split builds by visual runtime')
     parser.add_argument('-p', '--pages', type=int,
                         help='split into additional conan pages')
+    parser.add_argument('-m', '--mingw', action='store_true',
+                        help='generate MinGW builds')
+    parser.add_argument('--mingw-versions', nargs='+',
+                        help='generate builds only for specified MinGW versions')
     args = parser.parse_args()
     print(args)
 
@@ -114,6 +118,11 @@ test_script:
         return apple_clang_template.format(image=xcode_images[version],
                                            version=version)
 
+    def format_mingw_build(version):
+        mingw_template = '        - MINGW_CONFIGURATIONS: "{config}"'
+        config = '{version}@x86_64@seh@posix'.format(version=version)
+        return mingw_template.format(config=config)
+
     def split_appveyor(builds, token, values):
         new_builds = []
         for b in builds:
@@ -151,18 +160,13 @@ test_script:
     clang_versions = args.clang_versions or ['3.9', '4.0', '5.0', '6.0']
     apple_clang_versions = args.apple_clang_versions or ['7.3', '8.1', '9.0', '9.1', '10.0']
     msvc_versions = args.msvc_versions or ['12', '14', '15']
+    mingw_versions = args.mingw_versions or ['4.9', '5', '6', '7']
+    mingw_versions = mingw_versions if args.mingw else []
 
     gcc_builds = [format_gcc_build(v) for v in gcc_versions]
     clang_builds = [format_clang_build(v) for v in clang_versions]
     apple_clang_builds = [format_apple_clang_build(v) for v in apple_clang_versions]
-    # TODO : MinGW
-    mingw_builds = [r"        #- MINGW_CONFIGURATIONS: "
-                    r"'4.9@x86_64@seh@posix, "
-                    r"4.9@x86_64@sjlj@posix, "
-                    r"4.9@x86@sjlj@posix, "
-                    r"4.9@x86@dwarf2@posix, "
-                    r"6@x86_64@seh@posix, "
-                    r"7@x86_64@seh@posix'"]
+    mingw_builds = [format_mingw_build(v) for v in mingw_versions]
     msvc_builds = [format_msvc_build(v) for v in msvc_versions]
 
     # always split appveyor by build type
@@ -172,12 +176,14 @@ test_script:
         gcc_builds = split_travis(gcc_builds, 'CONAN_BUILD_TYPES', ['Release', 'Debug'])
         clang_builds = split_travis(clang_builds, 'CONAN_BUILD_TYPES', ['Release', 'Debug'])
         apple_clang_builds = split_travis(apple_clang_builds, 'CONAN_BUILD_TYPES', ['Release', 'Debug'])
+        mingw_builds = split_appveyor(mingw_builds, 'CONAN_BUILD_TYPES', ['Release', 'Debug'])
 
     if args.split_arch:
         msvc_builds = split_appveyor(msvc_builds, 'CONAN_ARCHS', ['x86', 'x86_64'])
         gcc_builds = split_travis(gcc_builds, 'CONAN_ARCHS', ['x86', 'x86_64'])
         clang_builds = split_travis(clang_builds, 'CONAN_ARCHS', ['x86', 'x86_64'])
         # NOTE : Apple Clang is intentionally omitted, as we build only x86_64 for OSX
+        # NOTE : MinGW is intentionally omitted, as we build only x86_64
 
     if args.split_visual_runtime:
         msvc_builds = split_appveyor(msvc_builds, 'CONAN_VISUAL_RUNTIME', ['MT', 'MD'])
@@ -187,6 +193,7 @@ test_script:
         gcc_builds = pages_travis(gcc_builds, args.pages)
         clang_builds = pages_travis(clang_builds, args.pages)
         apple_clang_builds = pages_travis(apple_clang_builds, args.pages)
+        mingw_builds = pages_appveyor(mingw_builds, args.pages)
 
     gcc_builds = '\n'.join(gcc_builds)
     clang_builds = '\n'.join(clang_builds)
