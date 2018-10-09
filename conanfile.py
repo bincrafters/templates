@@ -56,8 +56,6 @@ class LibnameConan(ConanFile):
     def configure_cmake(self):
         cmake = CMake(self)
         cmake.definitions["BUILD_TESTS"] = False # example
-        if self.settings.os != 'Windows':
-            cmake.definitions['CMAKE_POSITION_INDEPENDENT_CODE'] = self.options.fPIC
         cmake.configure(build_folder=self.build_subfolder)
         return cmake
 
