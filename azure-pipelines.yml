@@ -16,28 +16,28 @@ jobs:
     matrix:
       GCC4.9:
         CONAN_GCC_VERSIONS: 4.9
-        CONAN_DOCKER_IMAGE: lasote/conangcc49
+        CONAN_DOCKER_IMAGE: conanio/gcc49
       GCC5:
         CONAN_GCC_VERSIONS: 5
-        CONAN_DOCKER_IMAGE: lasote/conangcc5
+        CONAN_DOCKER_IMAGE: conanio/gcc5
       GCC6:
         CONAN_GCC_VERSIONS: 6
-        CONAN_DOCKER_IMAGE: lasote/conangcc6
+        CONAN_DOCKER_IMAGE: conanio/gcc6
       GCC7:
         CONAN_GCC_VERSIONS: 7
-        CONAN_DOCKER_IMAGE: lasote/conangcc7
+        CONAN_DOCKER_IMAGE: conanio/gcc7
       GCC8:
         CONAN_GCC_VERSIONS: 8
-        CONAN_DOCKER_IMAGE: lasote/conangcc8
+        CONAN_DOCKER_IMAGE: conanio/gcc8
       CLANG3.9:
         CONAN_CLANG_VERSIONS: 3.9
-        CONAN_DOCKER_IMAGE: lasote/conanclang39
+        CONAN_DOCKER_IMAGE: conanio/clang39
       CLANG4.0:
         CONAN_CLANG_VERSIONS: 4.0
-        CONAN_DOCKER_IMAGE: lasote/conanclang40
+        CONAN_DOCKER_IMAGE: conanio/clang40
       CLANG5.0:
         CONAN_CLANG_VERSIONS: 5.0
-        CONAN_DOCKER_IMAGE: lasote/conanclang50
+        CONAN_DOCKER_IMAGE: conanio/clang50
       CLANG6.0:
         CONAN_CLANG_VERSIONS: 6.0
-        CONAN_DOCKER_IMAGE: lasote/conanclang60
+        CONAN_DOCKER_IMAGE: conanio/clang60
