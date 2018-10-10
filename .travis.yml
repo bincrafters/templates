@@ -8,7 +8,7 @@ linux: &linux
 matrix:
    include:
       - <<: *linux
-        env: CONAN_CLANG_VERSIONS=4.0 CONAN_DOCKER_IMAGE=lasote/conanclang40
+        env: CONAN_CLANG_VERSIONS=5.0 CONAN_DOCKER_IMAGE=conanio/clang50
 
 install:
   - chmod +x .ci/install.sh
