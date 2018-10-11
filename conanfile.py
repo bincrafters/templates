@@ -50,7 +50,7 @@ class LibnameConan(ConanFile):
 
     def _configure_cmake(self):
         cmake = CMake(self)
-        cmake.definitions["BUILD_TESTS"] = False # example
+        cmake.definitions["BUILD_TESTS"] = False  # example
         cmake.configure(build_folder=self._build_subfolder)
         return cmake
 
