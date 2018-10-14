@@ -1,9 +1,7 @@
 build: false
 
 environment:
-    PYTHON: "C:\\Python27"
-    PYTHON_VERSION: "2.7.15"
-    PYTHON_ARCH: "32"
+    PYTHON: "C:\\Python37"
 
     matrix:
         #- MINGW_CONFIGURATIONS: '4.9@x86_64@seh@posix, 4.9@x86_64@sjlj@posix, 4.9@x86@sjlj@posix, 4.9@x86@dwarf2@posix, 6@x86_64@seh@posix, 7@x86_64@seh@posix'
