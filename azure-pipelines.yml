@@ -12,6 +12,8 @@ jobs:
       ./.ci/install.sh
       chmod +x .ci/run.sh
       ./.ci/run.sh
+    env:
+      CONAN_PASSWORD: $(CONAN_PASSWORD)
   strategy:
     matrix:
       GCC4.9:
