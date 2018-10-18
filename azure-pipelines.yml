@@ -2,6 +2,7 @@ jobs:
 - job: Linux
   pool:
     vmImage: 'Ubuntu 16.04'
+  timeoutInMinutes: 120
   steps:
   - task: UsePythonVersion@0
     inputs:
