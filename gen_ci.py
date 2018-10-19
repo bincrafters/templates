@@ -38,6 +38,7 @@ def main():
 
     travis_template = """linux: &linux
    os: linux
+   dist: xenial
    sudo: required
    language: python
    python: "3.6"
@@ -53,20 +54,18 @@ matrix:
 {apple_clang_builds}
 
 install:
-  - chmod +x .travis/install.sh
-  - ./.travis/install.sh
+  - chmod +x .ci/install.sh
+  - ./.ci/install.sh
 
 script:
   - chmod +x .travis/run.sh
-  - ./.travis/run.sh
+  - ./.ci/run.sh
 """
 
     appveyor_template = """build: false
 
 environment:
-    PYTHON: "C:\\\\Python27"
-    PYTHON_VERSION: "2.7.15"
-    PYTHON_ARCH: "32"
+    PYTHON: "C:\\\\Python37"
 
     matrix:
 {mingw_builds}
@@ -95,14 +94,14 @@ test_script:
     def format_gcc_build(version):
         gcc_template = """      - <<: *linux
         env: CONAN_GCC_VERSIONS={version} CONAN_DOCKER_IMAGE={image}"""
-        image = 'lasote/conangcc%s' % version.replace('.', '')
+        image = 'conanio/gcc%s' % version.replace('.', '')
         return gcc_template.format(image=image,
                                    version=version)
 
     def format_clang_build(version):
         clang_template = """      - <<: *linux
         env: CONAN_CLANG_VERSIONS={version} CONAN_DOCKER_IMAGE={image}"""
-        image = 'lasote/conanclang%s' % version.replace('.', '')
+        image = 'conanio/clang%s' % version.replace('.', '')
         return clang_template.format(image=image,
                                      version=version)
 
