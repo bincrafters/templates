@@ -58,7 +58,7 @@ install:
   - ./.ci/install.sh
 
 script:
-  - chmod +x .travis/run.sh
+  - chmod +x .ci/run.sh
   - ./.ci/run.sh
 """
 
