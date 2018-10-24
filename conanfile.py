@@ -9,6 +9,8 @@ class LibnameConan(ConanFile):
     name = "libname"
     version = "0.0.0"
     description = "Keep it short"
+    # topics can get used for searches, GitHub topics, Bintray tags etc. Add here keywords about the library
+    topics = ["conan", "libname", "logging"]
     url = "https://github.com/bincrafters/conan-libname"
     homepage = "https://github.com/original_author/original_lib"
     author = "Bincrafters <bincrafters@gmail.com>"
