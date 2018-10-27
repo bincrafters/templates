@@ -44,7 +44,7 @@ class LibnameConan(ConanFile):
 
     def source(self):
         source_url = "https://github.com/libauthor/libname"
-        tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
+        tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version), sha256="Please-provide-a-checksum")
         extracted_dir = self.name + "-" + self.version
 
         # Rename to "source_subfolder" is a convention to simplify later steps
