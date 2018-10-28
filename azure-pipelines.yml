@@ -47,3 +47,28 @@ jobs:
       CLANG7.0:
         CONAN_CLANG_VERSIONS: 7.0
         CONAN_DOCKER_IMAGE: conanio/clang7
+- job: macOS
+  pool:
+    vmImage: 'macOS-10.13'
+  steps:
+  - script: |
+      /bin/bash -c "sudo xcode-select -s /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer"
+      pip install --upgrade pip
+      chmod +x .ci/install.sh
+      ./.ci/install.sh
+      chmod +x .ci/run.sh
+      ./.ci/run.sh
+  strategy:
+    matrix:
+      CLANG8.1:
+        CONAN_APPLE_CLANG_VERSIONS: 8.1
+        XCODE_VERSION: 8.3.3
+      CLANG9.0:
+        CONAN_APPLE_CLANG_VERSIONS: 9.0
+        XCODE_VERSION: 9.2
+      CLANG9.1:
+        CONAN_APPLE_CLANG_VERSIONS: 9.1
+        XCODE_VERSION: 9.4.1
+      CLANG10.0:
+        CONAN_APPLE_CLANG_VERSIONS: 10.0
+        XCODE_VERSION: 10
