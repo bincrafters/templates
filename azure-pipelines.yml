@@ -50,6 +50,7 @@ jobs:
 - job: macOS
   pool:
     vmImage: 'macOS-10.13'
+  timeoutInMinutes: 120
   steps:
   - script: |
       /bin/bash -c "sudo xcode-select -s /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer"
