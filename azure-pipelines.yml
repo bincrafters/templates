@@ -44,3 +44,6 @@ jobs:
       CLANG6.0:
         CONAN_CLANG_VERSIONS: 6.0
         CONAN_DOCKER_IMAGE: conanio/clang60
+      CLANG7.0:
+        CONAN_CLANG_VERSIONS: 7.0
+        CONAN_DOCKER_IMAGE: conanio/clang7
