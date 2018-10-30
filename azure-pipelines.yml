@@ -14,6 +14,7 @@ jobs:
       chmod +x .ci/run.sh
       ./.ci/run.sh
     env:
+      CONAN_LOGIN_USERNAME: $(CONAN_LOGIN_USERNAME)
       CONAN_PASSWORD: $(CONAN_PASSWORD)
   strategy:
     matrix:
@@ -59,6 +60,9 @@ jobs:
       ./.ci/install.sh
       chmod +x .ci/run.sh
       ./.ci/run.sh
+    env:
+      CONAN_LOGIN_USERNAME: $(CONAN_LOGIN_USERNAME)
+      CONAN_PASSWORD: $(CONAN_PASSWORD)
   strategy:
     matrix:
       CLANG8.1:
