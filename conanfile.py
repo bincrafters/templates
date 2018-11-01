@@ -10,16 +10,12 @@ class LibnameConan(ConanFile):
     version = "0.0.0"
     description = "Keep it short"
     # topics can get used for searches, GitHub topics, Bintray tags etc. Add here keywords about the library
-    topics = ["conan", "libname", "logging"]
+    topics = ("conan", "libname", "logging")
     url = "https://github.com/bincrafters/conan-libname"
     homepage = "https://github.com/original_author/original_lib"
     author = "Bincrafters <bincrafters@gmail.com>"
-    # Indicates License type of the packaged library
-    license = "MIT"
-
-    # Packages the license for the conanfile.py
-    exports = ["LICENSE.md"]
-
+    license = "MIT"  # Indicates License type of the packaged library
+    exports = ["LICENSE.md"]      # Packages the license for the conanfile.py
     # Remove following lines if the target lib does not use cmake.
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
