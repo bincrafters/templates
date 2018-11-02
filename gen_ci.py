@@ -39,9 +39,8 @@ def main():
     travis_template = """linux: &linux
    os: linux
    dist: xenial
-   sudo: required
    language: python
-   python: "3.6"
+   python: "3.7"
    services:
      - docker
 osx: &osx
@@ -101,7 +100,10 @@ test_script:
     def format_clang_build(version):
         clang_template = """      - <<: *linux
         env: CONAN_CLANG_VERSIONS={version} CONAN_DOCKER_IMAGE={image}"""
-        image = 'conanio/clang%s' % version.replace('.', '')
+        if int(float(version)) >= 7:
+            image = 'conanio/clang{}'.format(int(float(version)))
+        else:
+            image = 'conanio/clang{}'.format(version.replace('.', ''))
         return clang_template.format(image=image,
                                      version=version)
 
@@ -110,7 +112,7 @@ test_script:
                         '8.1': 'xcode8.3',
                         '9.0': 'xcode9',
                         '9.1': 'xcode9.4',
-                        '10.0': 'xcode10'}
+                        '10.0': 'xcode10.1'}
         apple_clang_template = """      - <<: *osx
         osx_image: {image}
         env: CONAN_APPLE_CLANG_VERSIONS={version}"""
@@ -156,7 +158,7 @@ test_script:
         return new_builds
 
     gcc_versions = args.gcc_versions or ['4.9', '5', '6', '7', '8']
-    clang_versions = args.clang_versions or ['3.9', '4.0', '5.0', '6.0']
+    clang_versions = args.clang_versions or ['3.9', '4.0', '5.0', '6.0', '7.0']
     apple_clang_versions = args.apple_clang_versions or ['7.3', '8.1', '9.0', '9.1', '10.0']
     msvc_versions = args.msvc_versions or ['12', '14', '15']
     mingw_versions = args.mingw_versions or ['4.9', '5', '6', '7']
