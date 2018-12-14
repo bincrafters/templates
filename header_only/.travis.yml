@@ -1,0 +1,19 @@
+linux: &linux
+   os: linux
+   sudo: required
+   language: python
+   python: "3.6"
+   services:
+     - docker
+matrix:
+   include:
+      - <<: *linux
+        env: CONAN_CLANG_VERSIONS=5.0 CONAN_DOCKER_IMAGE=conanio/clang50
+
+install:
+  - chmod +x .ci/install.sh
+  - ./.ci/install.sh
+
+script:
+  - chmod +x .ci/run.sh
+  - ./.ci/run.sh
