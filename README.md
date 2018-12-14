@@ -16,7 +16,10 @@ The workflow is intended to be as simple as possible for users to setup a reposi
     1. default - Used for typical packages
     2. header_only - Used for header-only packages
     3. installer - Used for tools installers
+4.  Thoroughly review the following files, and edit any lines necessary: 
+	1. README.md - Find/Replace `package_name` with your actual package name (3 places)
+	2. conanfile.py - Virtually every line may need editing
 	
 ## Maintaining Templates
 
-These templates will always contain some duplicate content. When a change is required, the most thorough and efficient approach is to use a mechanism which lets you search/find/replace all instances of a particular piece of text in all files at one time.  Most graphical text editors have a feature for this, and command-line tools like `sed` are also capable of doing this. 
+These templates will always contain some duplicate content. When a change is required, the most thorough and efficient approach is to use a mechanism which lets you search/find/replace all instances of a particular piece of text in all files at one time.  Most graphical text editors have a feature for this, and command-line tools like `sed` are also capable of doing this.  However, the differences between the templates are often subtle and intentional, so most changes should be thought through separately in the context of the template.  Use your best judgement to avoid mistakes.
