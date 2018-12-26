@@ -1,0 +1,27 @@
+linux: &linux
+   os: linux
+   dist: xenial
+   language: python
+   python: "3.7"
+   services:
+     - docker
+osx: &osx
+   os: osx
+   language: generic
+matrix:
+   include:
+      - <<: *linux
+        env: CONAN_GCC_VERSIONS=7 CONAN_DOCKER_IMAGE=conanio/gcc7-centos6-x86 ARCH=x86
+      - <<: *linux
+        env: CONAN_GCC_VERSIONS=7 CONAN_DOCKER_IMAGE=conanio/gcc7-centos6 ARCH=x86_64
+      - <<: *osx
+        osx_image: xcode10.1
+        env: CONAN_APPLE_CLANG_VERSIONS=10.0 ARCH=x86_64
+
+install:
+  - chmod +x .ci/install.sh
+  - ./.ci/install.sh
+
+script:
+  - chmod +x .ci/run.sh
+  - ./.ci/run.sh
