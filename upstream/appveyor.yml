@@ -1,0 +1,68 @@
+image: Visual Studio 2017
+
+configuration:
+  - Debug
+  - Release
+
+environment:
+  global:
+    # ---- TODO: Enter values ----
+    CONAN_USERNAME: "TODO_ENTER_PACKAGE_USERNAME"
+    CONAN_PACKAGE_NAME: "TODO_ENTER_PACKAGE_NAME"
+  matrix:
+    # ---- TODO: PLACE HERE ALL EXISTING BUILD JOBS ----
+    #
+    # ---- TODO: If neccessary adjust the following configurations to your upstream project support -----
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      CONAN_VISUAL_VERSIONS: 12
+      CONAN_BUILD_TYPES: Release
+      CONAN: true
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      CONAN_VISUAL_VERSIONS: 12
+      CONAN_BUILD_TYPES: Debug
+      CONAN: true
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      CONAN_VISUAL_VERSIONS: 14
+      CONAN_BUILD_TYPES: Release
+      CONAN: true
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      CONAN_VISUAL_VERSIONS: 14
+      CONAN_BUILD_TYPES: Debug
+      CONAN: true
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      CONAN_VISUAL_VERSIONS: 15
+      CONAN_BUILD_TYPES: Release
+      CONAN: true
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      CONAN_VISUAL_VERSIONS: 15
+      CONAN_BUILD_TYPES: Debug
+      CONAN: true
+
+matrix:
+  exclude:
+    # We only need one time all Conan jobs, so exclude all but one configuration from matrix expanding
+    # ---- TODO: If more configuration matrix values exist, extend this until only one value remains ----
+    # ---- TODO: If no configuration matrix value exist, add one ----
+    - CONAN: true
+      configuration: Debug
+  fast_finish: true
+
+for:
+-
+  matrix:
+    except:
+      - CONAN: true
+
+# ---- TODO: Place here all existing default build steps ----
+
+-
+  matrix:
+    only:
+      - CONAN: true
+  skip_non_tags: true
+
+  install:
+    - python conan/appveyor/install.py
+
+  build_script:
+    - python conan/appveyor/build.py
