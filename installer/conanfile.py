@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from conans import ConanFile, CMake, tools
@@ -58,4 +57,6 @@ class LibnameConan(ConanFile):
         del self.info.settings.compiler
 
     def package_info(self):
-        self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
+        bindir = os.path.join(self.package_folder, "bin")
+        self.output.info("Appending PATH environment variable: {}".format(bindir))
+        self.env_info.PATH.append(bindir)
