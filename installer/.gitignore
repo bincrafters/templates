@@ -42,5 +42,6 @@ tmp/
 .pydevproject
 .settings/*
 .ropeproject/*
+.vscode/*
 ## emacs
 *~
