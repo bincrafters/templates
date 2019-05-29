@@ -1,0 +1,40 @@
+matrix:
+  fast_finish: true
+  include:
+  - os: linux
+    dist: xenial
+    language: python
+    python: '3.7'
+  - os: osx
+    language: generic
+    osx_image: xcode10.1
+
+install:
+  - chmod +x .ci/install.sh
+  - ".ci/install.sh"
+
+script:
+  - chmod +x .ci/run.sh
+  - ".ci/run.sh"
+
+after_success:
+  - codecov
+
+deploy:
+  - provider: pypi
+    user: ${PYPI_USERNAME}
+    password: ${PYPI_PASSWORD}
+    on:
+      tags: true
+      condition: "$TRAVIS_OS_NAME = 'linux'"
+    skip_cleanup: true
+    skip_existing: true
+  - provider: pypi
+    user: ${TEST_PYPI_USERNAME}
+    server: https://test.pypi.org/legacy/
+    password: ${TEST_PYPI_PASSWORD}
+    on:
+      branch: master
+      condition: "$TRAVIS_OS_NAME = 'linux'"
+    skip_cleanup: true
+skip_existing: true

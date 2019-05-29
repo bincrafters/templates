@@ -1,0 +1,16 @@
+build: false
+
+
+environment:
+    PYTHON_HOME: "C:\\Python37"
+
+    matrix:
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+
+install:
+  - set PATH=%PYTHON_HOME%;%PYTHON_HOME%/Scripts/;%PATH%
+  - pip.exe install -e .[test]
+
+test_script:
+- cd tests
+- pytest -v --cov=bincrafters_templates

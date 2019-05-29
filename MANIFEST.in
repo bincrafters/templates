@@ -1,0 +1,2 @@
+recursive-include bincrafters_templates *
+recursive-exclude bincrafters_templates *.pyc

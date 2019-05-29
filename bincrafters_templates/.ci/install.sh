@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-set -e
-set -x
+set -ex
 
 if [[ "$(uname -s)" == 'Darwin' ]]; then
     brew update || brew update
     brew outdated pyenv || brew upgrade pyenv
     brew install pyenv-virtualenv
+    brew install cmake || brew upgrade cmake || true
 
     if which pyenv > /dev/null; then
         eval "$(pyenv init -)"
@@ -18,5 +18,7 @@ if [[ "$(uname -s)" == 'Darwin' ]]; then
     pyenv activate conan
 fi
 
-pip install codecov
-pip install -e .[test]
+pip install conan --upgrade
+pip install conan_package_tools bincrafters_package_tools
+
+conan user
