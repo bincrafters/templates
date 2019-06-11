@@ -1,0 +1,16 @@
+dist: xenial
+language: generic
+
+branches:
+  only:
+    - master
+    - ci
+
+env:
+  - template=default
+  - template=header_only
+  - template=installer_only
+  #- default_installer_hybrid
+
+script:
+  - source .travis.sh
