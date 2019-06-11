@@ -5,7 +5,14 @@ This repository contains "templates" for Git repositories hosting 3rdParty Conan
 https://github.com/bincrafters/community/issues/new  
 
 
-## Using Templates
+## Using Templates Via GitHub
+Click on the following links to directly create new GitHub repositories with our templates:
+  * [default](https://github.com/bincrafters/template-default/generate) - Used for typical packages
+  * [header_only](https://github.com/bincrafters/template-header_only/generate) - Used for header-only packages
+  * [installer_only](https://github.com/bincrafters/template-installer_only/generate) - Used for tools installers
+
+
+## Using Templates Manually
 
 The workflow is intended to be as simple as possible for users to setup a repository based on these templates.  The general steps are:
 
