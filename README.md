@@ -5,14 +5,16 @@ This repository contains "templates" for Git repositories hosting 3rdParty Conan
 https://github.com/bincrafters/community/issues/new  
 
 
-## Using Templates Via GitHub
+## Getting Files
+To get the templates you can use GitHub's templates feature or copy the files manually.
+
+### Via GitHub Templates
 Click on the following links to directly create new GitHub repositories with our templates:
   * [default](https://github.com/bincrafters/template-default/generate) - Used for typical packages
   * [header_only](https://github.com/bincrafters/template-header_only/generate) - Used for header-only packages
   * [installer_only](https://github.com/bincrafters/template-installer_only/generate) - Used for tools installers
 
-
-## Using Templates Manually
+### Manually
 
 The workflow is intended to be as simple as possible for users to setup a repository based on these templates.  The general steps are:
 
@@ -24,9 +26,13 @@ The workflow is intended to be as simple as possible for users to setup a reposi
     1. default - Used for typical packages
     2. header_only - Used for header-only packages
     3. installer_only - Used for tools installers
-4.  Thoroughly review the following files, and edit any lines necessary:
-	1. README.md - Find/Replace `package_name` with your actual package name (3 places)
-	2. conanfile.py - Virtually every line may need editing
+
+
+## Adapt The Template
+Thoroughly review the following files, and edit any lines necessary:
+  1. README.md - Find/Replace `package_name` with your actual package name (3 places)
+  2. conanfile.py - Virtually every line may need editing
+  3. test_package/ - Write a test case
 
 
 ## Maintaining Templates
