@@ -35,6 +35,7 @@ test_package/build/*
 build/*
 *.pyc
 tmp/
+.DS_Store
 
 # IDE
 .idea/*
