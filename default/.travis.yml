@@ -1,3 +1,6 @@
+env:
+   global:
+     - CONAN_ARCHS=x86_64
 linux: &linux
    os: linux
    dist: xenial
