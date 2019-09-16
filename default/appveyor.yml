@@ -1,8 +1,6 @@
 environment:
   PYTHON_HOME: "C:\\Python37"
 
-  CONAN_ARCHS: x86_64
-
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       CONAN_VISUAL_VERSIONS: 14
