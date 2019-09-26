@@ -10,22 +10,11 @@ To get the templates you can use GitHub's templates feature or copy the files ma
 
 ### Via GitHub Templates
 Click on the following links to directly create new GitHub repositories with our templates:
-  * [default](https://github.com/bincrafters/template-default/generate) - Used for typical packages
-  * [header_only](https://github.com/bincrafters/template-header_only/generate) - Used for header-only packages
-  * [installer_only](https://github.com/bincrafters/template-installer_only/generate) - Used for tools installers
+  * [default](https://github.com/bincrafters/template-default/generate) - Used for typical packages ([repository](https://github.com/bincrafters/template-default))
+  * [header_only](https://github.com/bincrafters/template-header_only/generate) - Used for header-only packages ([repository](https://github.com/bincrafters/template-header_only))
+  * [installer_only](https://github.com/bincrafters/template-installer_only/generate) - Used for tools installers ([repository](https://github.com/bincrafters/template-installer_only))
 
-### Manually
-
-The workflow is intended to be as simple as possible for users to setup a repository based on these templates.  The general steps are:
-
-1. For a new Conan recipe, create an empty git repository
-2.  Copy and paste the following folders into your repository root as-is, no changes are necessary:
-	1. .github
-	2. .ci
-3.  Copy and paste all the contents from ONE the template folders into your repository root:
-    1. default - Used for typical packages
-    2. header_only - Used for header-only packages
-    3. installer_only - Used for tools installers
+alternatively, you can clone these repositories and manually copy all the files to a new repository.
 
 
 ## Adapt The Template
