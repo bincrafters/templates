@@ -47,7 +47,7 @@ TOKEN_REPO=${TARGET_REPOSITORY/github.com/$GITHUB_BOT_NAME:$GITHUB_TOKEN@github.
 
 git add -A .
 # true for the case of no change, we don't want to let CI fail due to this
-git commit -am "Automatic update ${template} from central templates directory" || true
+git commit -am "Automatic update from central templates repository for ${template}" || true
 
 # Push changes
 git push ${TOKEN_REPO} || git push -u origin master ${TOKEN_REPO}
