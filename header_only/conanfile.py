@@ -4,9 +4,7 @@ import os
 
 class LibnameConan(ConanFile):
     name = "libname"
-    version = "0.0.0"
     description = "Keep it short"
-    # topics can get used for searches, GitHub topics, Bintray tags etc. Add here keywords about the library
     topics = ("conan", "libname", "logging")
     url = "https://github.com/bincrafters/conan-libname"
     homepage = "https://github.com/original_author/original_lib"
@@ -17,15 +15,12 @@ class LibnameConan(ConanFile):
     # Packages the license for the conanfile.py
     exports = ["LICENSE.md"]
 
-    # Custom attributes for Bincrafters recipe conventions
     _source_subfolder = "source_subfolder"
 
     def source(self):
-        source_url = "https://github.com/libauthor/libname"
-        tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version), sha256="Please-provide-a-checksum")
-        extracted_dir = self.name + "-" + self.version
+        tools.get(**self.conan_data["sources"][self.version])
 
-        #Rename to "source_folder" is a convention to simplify later steps
+        extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self._source_subfolder)
 
     def package(self):

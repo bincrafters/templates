@@ -4,9 +4,7 @@ import os
 
 class LibnameConan(ConanFile):
     name = "libname"
-    version = "0.0.0"
     description = "Keep it short"
-    # topics can get used for searches, GitHub topics, Bintray tags etc. Add here keywords about the library
     topics = ("conan", "libname", "logging")
     url = "https://github.com/bincrafters/conan-libname"
     homepage = "https://github.com/original_author/original_lib"
@@ -17,19 +15,16 @@ class LibnameConan(ConanFile):
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
 
-    # Options may need to change depending on the packaged library.
+    # Options may need to change depending on the packaged library
     settings = "os_build", "arch_build", "compiler"
 
-    # Custom attributes for Bincrafters recipe conventions
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
 
     def source(self):
-        source_url = "https://github.com/libauthor/libname"
-        tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version), sha256="Please-provide-a-checksum")
-        extracted_dir = self.name + "-" + self.version
+        tools.get(**self.conan_data["sources"][self.version])
 
-        # Rename to "source_subfolder" is a convention to simplify later steps
+        extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self._source_subfolder)
 
     def _configure_cmake(self):

@@ -19,10 +19,11 @@ alternatively, you can clone these repositories and manually copy all the files 
 
 ## Adapt The Template
 Thoroughly review the following files, and edit any lines necessary:
-  1. README.md - Find/Replace `package_name` with your actual package name (3 places)
-  2. conanfile.py - Virtually every line may need editing
-  3. test_package/ - Write a test case
-
+  1. `README.md` - Find/Replace `package_name` with your actual package name (3 places)
+  2. `conandata.yml` - Replace version, download url and the SHA256 checksum ([explanation](https://github.com/conan-io/conan-center-index/wiki#the-conandatayml))
+  3. `conanfile.py` - Virtually every line may need editing
+  4. `test_package/` - Write a test case
+  5. Test your recipe locally by runnning e.g. `conan create . libname/version@`
 
 ## Maintaining Templates
 

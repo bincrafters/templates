@@ -22,6 +22,7 @@ rm -rv !(".git"|"."|"..") || true
 cd ..
 
 # Copy generic files to tmp dir
+cp -v "conandata.yml" "${tmpdir}"
 cp -rv ".ci" "${tmpdir}"
 cp -rv ".github" "${tmpdir}"
 
