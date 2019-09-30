@@ -8,12 +8,8 @@ class LibnameConan(ConanFile):
     topics = ("conan", "libname", "logging")
     url = "https://github.com/bincrafters/conan-libname"
     homepage = "https://github.com/original_author/original_lib"
-    author = "Bincrafters <bincrafters@gmail.com>"
     license = "MIT"  # Indicates license type of the packaged library; please use SPDX Identifiers https://spdx.org/licenses/
     no_copy_source = True
-
-    # Packages the license for the conanfile.py
-    exports = ["LICENSE.md"]
 
     _source_subfolder = "source_subfolder"
 
