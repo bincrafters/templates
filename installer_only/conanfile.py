@@ -8,10 +8,8 @@ class LibnameConan(ConanFile):
     topics = ("conan", "libname", "logging")
     url = "https://github.com/bincrafters/conan-libname"
     homepage = "https://github.com/original_author/original_lib"
-    author = "Bincrafters <bincrafters@gmail.com>"
     license = "MIT"  # Indicates license type of the packaged library; please use SPDX Identifiers https://spdx.org/licenses/
-    exports = ["LICENSE.md"]      # Packages the license for the conanfile.py
-    # Remove following lines if the target lib does not use cmake.
+    # Remove following lines if the target lib does not use CMake
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
 
