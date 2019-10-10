@@ -13,7 +13,7 @@ class LibnameConan(ConanFile):
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
 
-    # Options may need to change depending on the packaged library.
+    # Options may need to change depending on the packaged library
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = {"shared": False, "fPIC": True}
@@ -31,7 +31,6 @@ class LibnameConan(ConanFile):
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])
-
         extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self._source_subfolder)
 
