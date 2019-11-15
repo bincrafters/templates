@@ -2,9 +2,9 @@ parameters:
   conanLoginUsername: ""
   conanPassword: ""
   pythonVersion: "3.7"
-  vsVersions: "14,15,16"
-  appleClangVersions: "10"
-  splitByBuildTypes: "false"
+  vsVersions: "14,15,16"  # Possible values: any combination of 14, 15, 16 or empty ("")
+  appleClangVersions: ""  # Possible values: "10", "" (for no Apple Clang build jobs)
+  splitByBuildTypes: "false"  # Possible values: "false", "true"
 
 jobs:
 - ${{ if ne(parameters.appleClangVersions, '') }}:
