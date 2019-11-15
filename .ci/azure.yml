@@ -1,0 +1,146 @@
+parameters:
+  conanLoginUsername: ""
+  conanPassword: ""
+  pythonVersion: "3.7"
+  vsVersions: "14,15,16"
+  appleClangVersions: "10"
+  splitByBuildTypes: "false"
+
+jobs:
+- ${{ if ne(parameters.appleClangVersions, '') }}:
+  - job: macOS
+    pool:
+      vmImage: $(AZP_BUILD_WORKER_IMAGE)
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: ${{ parameters.pythonVersion }}
+    - script: |
+        pip install --upgrade pip
+        python --version
+        pip --version
+        unset PYENV_ROOT
+        curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+        export PATH="$HOME/.pyenv/bin:$PATH"
+        if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+        pyenv install 3.7.1
+        pyenv virtualenv 3.7.1 conan
+        pyenv rehash
+        pyenv activate conan
+        pip install cmake --upgrade
+        pip install bincrafters_package_tools
+        conan user
+      displayName: Install Conan
+    - script: |
+        export PATH="$HOME/.pyenv/bin:$PATH"
+        if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+        pyenv activate conan
+        python build.py
+      env:
+        CONAN_LOGIN_USERNAME: ${{ parameters.conanLoginUsername }}
+        CONAN_PASSWORD: ${{ parameters.conanPassword }}
+      displayName: Run
+    
+    strategy:
+      matrix:
+        ${{ if eq(parameters.splitByBuildTypes, 'true') }}:
+          ${{ if contains(parameters.appleClangVersions, 10) }}:
+            Apple-Clang 10 Release:
+              AZP_BUILD_WORKER_IMAGE: macOS-10.13
+              CONAN_APPLE_CLANG_VERSIONS: 10.0
+              CONAN_BUILD_TYPES: Release
+            Apple-Clang 10 Debug:
+              AZP_BUILD_WORKER_IMAGE: macOS-10.13
+              CONAN_APPLE_CLANG_VERSIONS: 10.0
+              CONAN_BUILD_TYPES: Debug
+        ${{ if ne(parameters.splitByBuildTypes, 'true') }}:
+          ${{ if contains(parameters.appleClangVersions, 10) }}:
+            Apple-Clang 10:
+              AZP_BUILD_WORKER_IMAGE: macOS-10.13
+              CONAN_APPLE_CLANG_VERSIONS: 10.0
+
+- ${{ if ne(parameters.vsVersions, '') }}:
+  - job: Windows
+    pool:
+      vmImage: $(AZP_BUILD_WORKER_IMAGE)
+    timeoutInMinutes: 180
+    steps:
+    - task: UsePythonVersion@0
+      condition: ne(variables.CONAN_VISUAL_VERSIONS, 14)
+      inputs:
+        versionSpec: ${{ parameters.pythonVersion }}
+    - task: PowerShell@2
+      condition: eq(variables.CONAN_VISUAL_VERSIONS, 14)
+      inputs:
+        targetType: inline
+        script: |
+          Invoke-WebRequest https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64-webinstall.exe -OutFile C:\py3-setup.exe
+          C:\py3-setup.exe /quiet PrependPath=1 InstallAllUsers=1 Include_launcher=1 InstallLauncherAllUsers=1 Include_test=0 Include_doc=0 Include_dev=0 Include_debug=0 Include_tcltk=0 TargetDir=C:\Python3 | Out-Null
+          Write-Host "##vso[task.prependpath]C:\Python3"
+          Write-Host "##vso[task.prependpath]C:\Python3\Scripts"
+          Invoke-WebRequest -OutFile get-pip.py https://bootstrap.pypa.io/get-pip.py
+          C:\Python3\python.exe get-pip.py
+          Remove-Item C:\py3-setup.exe
+          Remove-Item get-pip.py
+          Remove-Item $env:TEMP -Recurse -ErrorAction SilentlyContinue
+          $rmvfolders = @( “C:\NPM\*“, “C:\java\*“, “C:\Program Files\nodejs\*“, “C:\Python27\*“, “C:\Program Files (x86)\GtkSharp\*“ )
+          Remove-Item $rmvfolders -Recurse -Force
+      displayName: UsePythonVersion for VS 2015
+    - script: |
+        rmdir /S /Q C:\ProgramData\chocolatey
+        rmdir /S /Q C:\Strawberry\
+        python --version
+        pip --version
+        pip install bincrafters_package_tools
+        conan user
+      displayName: Install Conan
+    - script: |
+        python build.py
+      env:
+        CONAN_LOGIN_USERNAME: ${{ parameters.conanLoginUsername }}
+        CONAN_PASSWORD: ${{ parameters.conanPassword }}
+      displayName: Run
+
+    strategy:
+      matrix:
+        ${{ if eq(parameters.splitByBuildTypes, 'true') }}:
+          ${{ if contains(parameters.vsVersions, 14) }}:
+            VS 2015 Release:
+              AZP_BUILD_WORKER_IMAGE: vs2015-win2012r2
+              CONAN_VISUAL_VERSIONS: 14
+              CONAN_BUILD_TYPES: Release
+            VS 2015 Debug:
+              AZP_BUILD_WORKER_IMAGE: vs2015-win2012r2
+              CONAN_VISUAL_VERSIONS: 14
+              CONAN_BUILD_TYPES: Debug
+          ${{ if contains(parameters.vsVersions, 15) }}:
+            VS 2017 Release:
+              AZP_BUILD_WORKER_IMAGE: vs2017-win2016
+              CONAN_VISUAL_VERSIONS: 15
+              CONAN_BUILD_TYPES: Release
+            VS 2017 Debug:
+              AZP_BUILD_WORKER_IMAGE: vs2017-win2016
+              CONAN_VISUAL_VERSIONS: 15
+              CONAN_BUILD_TYPES: Debug
+          ${{ if contains(parameters.vsVersions, 16) }}:
+            VS 2019 Release:
+              AZP_BUILD_WORKER_IMAGE: windows-2019
+              CONAN_VISUAL_VERSIONS: 16
+              CONAN_BUILD_TYPES: Release
+            VS 2019 Debug:
+              AZP_BUILD_WORKER_IMAGE: windows-2019
+              CONAN_VISUAL_VERSIONS: 16
+              CONAN_BUILD_TYPES: Debug
+        ${{ if ne(parameters.splitByBuildTypes, 'true') }}:
+          ${{ if contains(parameters.vsVersions, 14) }}:
+            VS 2015:
+              AZP_BUILD_WORKER_IMAGE: vs2015-win2012r2
+              CONAN_VISUAL_VERSIONS: 14
+          ${{ if contains(parameters.vsVersions, 15) }}:
+            VS 2017:
+              AZP_BUILD_WORKER_IMAGE: vs2017-win2016
+              CONAN_VISUAL_VERSIONS: 15
+          ${{ if contains(parameters.vsVersions, 16) }}:
+            VS 2019:
+              AZP_BUILD_WORKER_IMAGE: windows-2019
+              CONAN_VISUAL_VERSIONS: 16
