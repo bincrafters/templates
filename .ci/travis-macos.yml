@@ -1,0 +1,16 @@
+osx: &osx
+   os: osx
+   language: generic
+matrix:
+  include:
+    - <<: *osx
+      osx_image: xcode9.4
+      env: CONAN_APPLE_CLANG_VERSIONS=9.1
+    - <<: *osx
+      osx_image: xcode10.3
+      env: CONAN_APPLE_CLANG_VERSIONS=10.0
+    - <<: *osx
+      osx_image: xcode11.2
+      env: CONAN_APPLE_CLANG_VERSIONS=11.0
+
+import: .ci/travis-steps.yml

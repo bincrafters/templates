@@ -1,0 +1,19 @@
+install: |
+  pip install --upgrade pip
+  python --version
+  pip --version
+  if [[ "$(uname -s)" == 'Darwin' ]]; then
+    pyenv install 3.7.1;
+    pyenv virtualenv 3.7.1 conan;
+    pyenv rehash;
+    pyenv activate conan;
+    pip install cmake --upgrade;
+  fi
+  pip install bincrafters_package_tools
+  conan user
+
+script: |
+  if [[ "$(uname -s)" == 'Darwin' ]]; then
+    pyenv activate conan;
+  fi
+  python build.py
