@@ -1,0 +1,49 @@
+on: [push, pull_request]
+
+env:
+  CONAN_USE_DOCKER: 1
+  CONAN_LOGIN_USERNAME: ${{ secrets.CONAN_LOGIN_USERNAME }}
+  CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
+
+jobs:
+  Gcc:
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ["4.9", "5", "6", "7", "8", "9"]
+    env:
+      CONAN_GCC_VERSIONS: ${{matrix.version}}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.8'
+      - name: Install Conan
+        run: |
+          pip install bincrafters_package_tools
+          conan user
+      - name: Run
+        run: |
+          python build.py
+
+  Clang:
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ["3.9", "4.0", "5.0", "6.0", "7.0", "8", "9"]
+    env:
+      CONAN_CLANG_VERSIONS: ${{matrix.version}}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.8'
+      - name: Install Conan
+        run: |
+          pip install bincrafters_package_tools
+          conan user
+      - name: Run
+        run: |
+          python build.py
