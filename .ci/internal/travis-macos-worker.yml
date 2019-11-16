@@ -1,3 +1,0 @@
-osx: &osx
-  os: osx
-  language: generic
