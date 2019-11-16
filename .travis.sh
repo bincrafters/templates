@@ -23,9 +23,9 @@ cd ..
 
 # Remove files we do not want to copy
 rm ".ci/azure.yml"
+rm -r ".ci/internal/"
 rm ".ci/travis-macos-splitByBuildTypes.yml"
 rm ".ci/travis-macos.yml"
-rm ".ci/travis-steps.yml"
 
 # Copy generic files to tmp dir
 cp -v "conandata.yml" "${tmpdir}"

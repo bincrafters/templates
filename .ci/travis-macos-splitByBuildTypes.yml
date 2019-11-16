@@ -1,6 +1,7 @@
-osx: &osx
-   os: osx
-   language: generic
+import:
+  - .ci/internal/travis-macos-worker.yml
+  - .ci/internal/travis-steps.yml
+
 matrix:
   include:
     - <<: *osx
@@ -21,5 +22,3 @@ matrix:
     - <<: *osx
       osx_image: xcode11.2
       env: CONAN_APPLE_CLANG_VERSIONS=11.0 CONAN_BUILD_TYPES=Release
-
-import: .ci/travis-steps.yml
