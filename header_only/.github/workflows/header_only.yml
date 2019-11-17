@@ -5,7 +5,7 @@ env:
   CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
 
 jobs:
-  Clang:
+  Linux:
     runs-on: ubuntu-18.04
     env:
       CONAN_CLANG_VERSIONS: 8
@@ -23,7 +23,7 @@ jobs:
         run: |
           python build.py
 
-  MSVC:
+  Windows:
     runs-on: windows-latest
     env:
       CONAN_VISUAL_VERSIONS: "16"
