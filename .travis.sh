@@ -21,15 +21,9 @@ cd "${tmpdir}"
 rm -rv !(".git"|"."|"..") || true
 cd ..
 
-# Remove files we do not want to copy
-rm ".ci/azure.yml"
-rm -r ".ci/internal/"
-rm ".ci/travis-macos-splitByBuildTypes.yml"
-rm ".ci/travis-macos.yml"
 
 # Copy generic files to tmp dir
 cp -v "conandata.yml" "${tmpdir}"
-cp -rv ".ci" "${tmpdir}"
 cp -rv ".github" "${tmpdir}"
 
 # Move specific files to tmp dir
