@@ -1,10 +1,11 @@
 parameters:
   conanLoginUsername: ""
   conanPassword: ""
-  pythonVersion: "3.7"
+  pythonVersion: "3.7.5"
   vsVersions: "14,15,16"  # Possible values: any combination of 14, 15, 16 or empty ("")
   appleClangVersions: ""  # Possible values: "10", "" (for no Apple Clang build jobs)
   splitByBuildTypes: "false"  # Possible values: "false", "true"
+  requireMoreDiskSpace: "true" # Possible values: "false", "true" - Deletes the entire Java stack for VS 2015 images
 
 jobs:
 - ${{ if ne(parameters.appleClangVersions, '') }}:
@@ -16,25 +17,15 @@ jobs:
       inputs:
         versionSpec: ${{ parameters.pythonVersion }}
     - script: |
-        pip install --upgrade pip
+        pip install --upgrade pip cmake
         python --version
         pip --version
-        unset PYENV_ROOT
-        curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-        export PATH="$HOME/.pyenv/bin:$PATH"
-        if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
-        pyenv install 3.7.1
-        pyenv virtualenv 3.7.1 conan
-        pyenv rehash
-        pyenv activate conan
-        pip install cmake --upgrade
+        which cmake
+        cmake --version
         pip install bincrafters_package_tools
         conan user
       displayName: Install Conan
     - script: |
-        export PATH="$HOME/.pyenv/bin:$PATH"
-        if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
-        pyenv activate conan
         python build.py
       env:
         CONAN_LOGIN_USERNAME: ${{ parameters.conanLoginUsername }}
@@ -74,27 +65,30 @@ jobs:
       inputs:
         targetType: inline
         script: |
-          Invoke-WebRequest https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64-webinstall.exe -OutFile C:\py3-setup.exe
-          C:\py3-setup.exe /quiet PrependPath=1 InstallAllUsers=1 Include_launcher=1 InstallLauncherAllUsers=1 Include_test=0 Include_doc=0 Include_dev=0 Include_debug=0 Include_tcltk=0 TargetDir=C:\Python3 | Out-Null
-          Write-Host "##vso[task.prependpath]C:\Python3"
-          Write-Host "##vso[task.prependpath]C:\Python3\Scripts"
+          Invoke-WebRequest https://aka.ms/nugetclidl -OutFile C:\nuget.exe
+          C:\nuget.exe install python -Version ${{ parameters.pythonVersion }} -ExcludeVersion -OutputDirectory C:\
           Invoke-WebRequest -OutFile get-pip.py https://bootstrap.pypa.io/get-pip.py
-          C:\Python3\python.exe get-pip.py
-          Remove-Item C:\py3-setup.exe
+          C:\python\tools\python.exe get-pip.py
+          Write-Host "##vso[task.prependpath]C:\python\tools"
+          Write-Host "##vso[task.prependpath]C:\python\tools\Scripts"
+          Remove-Item C:\nuget.exe
           Remove-Item get-pip.py
-          Remove-Item $env:TEMP -Recurse -ErrorAction SilentlyContinue
-          $rmvfolders = @( “C:\NPM\*“, “C:\java\*“, “C:\Program Files\nodejs\*“, “C:\Python27\*“, “C:\Program Files (x86)\GtkSharp\*“ )
-          Remove-Item $rmvfolders -Recurse -Force
       displayName: UsePythonVersion for VS 2015
     - script: |
+        echo %PATH%
         rmdir /S /Q C:\ProgramData\chocolatey
         rmdir /S /Q C:\Strawberry\
         python --version
         pip --version
+        cmake --version
         pip install bincrafters_package_tools
         conan user
       displayName: Install Conan
-    - script: |
+    - powershell: |
+        if (($env:CONAN_VISUAL_VERSIONS -eq 14) -And ('${{ parameters.requireMoreDiskSpace }}' -eq 'true')) {
+          Write-Host "VS2015 image and requireMoreDiskSpace is True - Delete Java stack for more disk space"
+          Start-Process -NoNewWindow cmd.exe "/c (del /f/s/q C:\java\ > nul) && (rmdir /S /Q C:\java\)" 
+        }
         python build.py
       env:
         CONAN_LOGIN_USERNAME: ${{ parameters.conanLoginUsername }}
