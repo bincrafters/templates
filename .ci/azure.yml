@@ -5,7 +5,7 @@ parameters:
   vsVersions: "14,15,16"  # Possible values: any combination of 14, 15, 16 or empty ("")
   appleClangVersions: ""  # Possible values: "10", "" (for no Apple Clang build jobs)
   splitByBuildTypes: "false"  # Possible values: "false", "true"
-  requireMoreDiskSpace: "true" # Possible values: "false", "true" - Deletes the entire Java stack for VS 2015 images
+  requireMoreDiskSpace: "false" # Possible values: "false", "true" - Deletes the entire Java stack for VS 2015 images
 
 jobs:
 - ${{ if ne(parameters.appleClangVersions, '') }}:
