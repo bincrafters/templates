@@ -78,6 +78,7 @@ jobs:
         echo %PATH%
         rmdir /S /Q C:\ProgramData\chocolatey
         rmdir /S /Q C:\Strawberry\
+        pip install --upgrade cmake
         python --version
         pip --version
         cmake --version
