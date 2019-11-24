@@ -76,8 +76,10 @@ jobs:
       displayName: UsePythonVersion for VS 2015
     - script: |
         echo %PATH%
-        rmdir /S /Q C:\ProgramData\chocolatey
-        rmdir /S /Q C:\Strawberry\
+        rmdir /S /Q "C:\ProgramData\chocolatey"
+        rmdir /S /Q "C:\Program Files (x86)\CMake\bin"
+        rmdir /S /Q "C:\Program Files\CMake\bin"
+        rmdir /S /Q "C:\Strawberry\"
         pip install --upgrade cmake
         python --version
         pip --version
