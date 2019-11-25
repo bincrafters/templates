@@ -74,18 +74,31 @@ jobs:
           Remove-Item C:\nuget.exe
           Remove-Item get-pip.py
       displayName: UsePythonVersion for VS 2015
-    - script: |
-        echo %PATH%
-        rmdir /S /Q "C:\ProgramData\chocolatey"
-        rmdir /S /Q "C:\Program Files (x86)\CMake\bin"
-        rmdir /S /Q "C:\Program Files\CMake\bin"
-        rmdir /S /Q "C:\Strawberry\"
+    - powershell: |
+        $delete = $(
+          Start-Process -PassThru -NoNewWindow cmd.exe '/c rmdir /S /Q "C:\ProgramData\chocolatey"';
+          Start-Process -PassThru -NoNewWindow cmd.exe '/c rmdir /S /Q "C:\Strawberry\"';
+          Start-Process -PassThru -NoNewWindow cmd.exe '/c rmdir /S /Q "C:\Program Files (x86)\CMake\bin"';
+          Start-Process -PassThru -NoNewWindow cmd.exe '/c rmdir /S /Q "C:\Program Files\CMake\bin"';
+          Start-Process -PassThru -NoNewWindow cmd.exe '/c del /S /Q "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"';
+          Start-Process -PassThru -NoNewWindow cmd.exe '/c del /S /Q "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"';
+        )
+        $delete | Wait-Process
         pip install --upgrade cmake
+        if ($env:CONAN_VISUAL_VERSIONS -eq 15) {
+          New-Item -ItemType SymbolicLink -Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" `
+          -Target (get-command cmake).Path
+        }
+        if ($env:CONAN_VISUAL_VERSIONS -eq 16) {
+          New-Item -ItemType SymbolicLink -Path "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" `
+          -Target (get-command cmake).Path
+        }
         python --version
         pip --version
+        echo (get-command cmake).Path
         cmake --version
         pip install bincrafters_package_tools
-        conan user
+        Start-Process -Wait -NoNewWindow cmd.exe '/c conan user'
       displayName: Install Conan
     - powershell: |
         if (($env:CONAN_VISUAL_VERSIONS -eq 14) -And ('${{ parameters.requireMoreDiskSpace }}' -eq 'true')) {
