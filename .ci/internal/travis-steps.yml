@@ -14,8 +14,8 @@ install: |
     eval "$(pyenv init -)";
     eval "$(pyenv virtualenv-init -)";
     pyenv --version;
-    pyenv install 3.7.1;
-    pyenv virtualenv 3.7.1 conan;
+    pyenv install 3.7.5;
+    pyenv virtualenv 3.7.5 conan;
     pyenv rehash;
     pyenv activate conan;
     pip install cmake --upgrade;
