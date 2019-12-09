@@ -4,22 +4,28 @@ osx: &osx
 
 matrix:
   include:
-    - <<: *osx
+    - stage: default
+      <<: *osx
       osx_image: xcode9.4
       env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_BUILD_TYPES=Debug
-    - <<: *osx
+    - stage: default
+      <<: *osx
       osx_image: xcode9.4
       env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_BUILD_TYPES=Release
-    - <<: *osx
+    - stage: default
+      <<: *osx
       osx_image: xcode10.3
       env: CONAN_APPLE_CLANG_VERSIONS=10.0 CONAN_BUILD_TYPES=Debug
-    - <<: *osx
+    - stage: default
+      <<: *osx
       osx_image: xcode10.3
       env: CONAN_APPLE_CLANG_VERSIONS=10.0 CONAN_BUILD_TYPES=Release
-    - <<: *osx
+    - stage: default
+      <<: *osx
       osx_image: xcode11.2
       env: CONAN_APPLE_CLANG_VERSIONS=11.0 CONAN_BUILD_TYPES=Debug
-    - <<: *osx
+    - stage: default
+      <<: *osx
       osx_image: xcode11.2
       env: CONAN_APPLE_CLANG_VERSIONS=11.0 CONAN_BUILD_TYPES=Release
 

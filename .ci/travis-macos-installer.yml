@@ -4,7 +4,8 @@ osx: &osx
 
 matrix:
   include:
-    - <<: *osx
+    - stage: installer
+      <<: *osx
       osx_image: xcode10.3
       env: CONAN_APPLE_CLANG_VERSIONS=10.0 ARCH=x86_64
 
