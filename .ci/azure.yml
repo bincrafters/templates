@@ -5,7 +5,7 @@ parameters:
   vsVersions: "14,15,16"  # Possible values: any combination of 14, 15, 16 or empty ("")
   appleClangVersions: ""  # Possible values: "10", "" (for no Apple Clang build jobs)
   splitByBuildTypes: "false"  # Possible values: "false", "true"
-  requireMoreDiskSpace: "false" # Possible values: "false", "true" - Deletes the entire Java stack for VS 2015 images
+  requireMoreDiskSpace: "false" # Possible values: "false", "true" - Deletes the entire Java stack for Windows images
 
 jobs:
 - ${{ if ne(parameters.appleClangVersions, '') }}:
@@ -103,8 +103,12 @@ jobs:
       displayName: Install Conan
     - powershell: |
         if (($env:CONAN_VISUAL_VERSIONS -eq 14) -And ('${{ parameters.requireMoreDiskSpace }}' -eq 'true')) {
-          Write-Host "VS2015 image and requireMoreDiskSpace is True - Delete Java stack for more disk space"
+          Write-Host "requireMoreDiskSpace is True - Delete Java stack for more disk space"
           Start-Process -NoNewWindow cmd.exe "/c (del /f/s/q C:\java\ > nul) && (rmdir /S /Q C:\java\)" 
+        }
+        if (($env:CONAN_VISUAL_VERSIONS -ne 14) -And ('${{ parameters.requireMoreDiskSpace }}' -eq 'true')) {
+          Write-Host "requireMoreDiskSpace is True - Delete Java stack for more disk space"
+          Start-Process -NoNewWindow cmd.exe '/c (del /f/s/q "C:\Program Files\Java" > nul) && (rmdir /S /Q "C:\Program Files\Java")' 
         }
         python build.py
       env:
