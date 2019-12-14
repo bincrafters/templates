@@ -57,6 +57,10 @@ jobs:
       vmImage: $(AZP_BUILD_WORKER_IMAGE)
     timeoutInMinutes: 180
     steps:
+    - script: |
+        git config --global core.autocrlf input
+      displayName: Configure git autocrlf
+    - checkout: self
     - task: UsePythonVersion@0
       condition: ne(variables.CONAN_VISUAL_VERSIONS, 14)
       inputs:
