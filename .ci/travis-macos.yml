@@ -14,7 +14,7 @@ matrix:
       env: CONAN_APPLE_CLANG_VERSIONS=10.0
     - stage: default
       <<: *osx
-      osx_image: xcode11.2
+      osx_image: xcode11.3
       env: CONAN_APPLE_CLANG_VERSIONS=11.0
 
 import: .ci/internal/travis-steps.yml
