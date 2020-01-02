@@ -1,0 +1,107 @@
+# bincrafters-conventions:gha-workflow-version:1
+# You can add custom environment variables above the version tag
+# Do not modify the tag or anything below the tag
+# This script gets automatically updated
+
+# Possible configurations:
+# env:
+#   splitByBuildTypes: "false"  # Possible values "false", "true", default: false
+
+# - IMPORTANT NOTICE: These configurations are actually not completely working as expected yet due to GHA limitations
+# but it is important to set this values already so they can be consumed later
+
+# You can furthermore set any environment variable understood by Conan and Conan Package Tools
+
+on: [push, pull_request]
+
+jobs:
+  # splitByBuildTypesFalse:
+  #   runs-on: ubuntu-18.04
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       compiler:
+  #       - { name: "GCC", version: "4.9"   }
+  #       - { name: "GCC", version: "5"     }
+  #       - { name: "GCC", version: "6"     }
+  #       - { name: "GCC", version: "7"     }
+  #       - { name: "GCC", version: "8"     }
+  #       - { name: "GCC", version: "9"     }
+  #       - { name: "CLANG", version: "3.9" }
+  #       - { name: "CLANG", version: "4.0" }
+  #       - { name: "CLANG", version: "5.0" }
+  #       - { name: "CLANG", version: "6.0" }
+  #       - { name: "CLANG", version: "7.0" }
+  #       - { name: "CLANG", version: "8"   }
+  #       - { name: "CLANG", version: "9"   }
+  #   name: ${{ matrix.compiler.name }} ${{ matrix.compiler.version }}
+  #   if: ${{ env.SPLIT_BY_BUILD_TYPES }} != 'true'
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - uses: actions/setup-python@v1
+  #       with:
+  #         python-version: '3.8'
+  #     - name: Install Conan
+  #       run: |
+  #         pip install bincrafters_package_tools
+  #         conan user
+  #     - name: Run
+  #       env:
+  #         CONAN_USE_DOCKER: 1
+  #         CONAN_LOGIN_USERNAME: ${{ secrets.CONAN_LOGIN_USERNAME }}
+  #         CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
+  #       run: |
+  #         export CONAN_${{ matrix.compiler.name }}_VERSIONS="${{ matrix.compiler.version }}"
+  #         python build.py
+  splitByBuildTypesTrue:
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler:
+        - { name: "GCC", version: "4.9", buildType: "Debug"     }
+        - { name: "GCC", version: "4.9", buildType: "Release"   }
+        - { name: "GCC", version: "5", buildType: "Debug"       }
+        - { name: "GCC", version: "5", buildType: "Release"     }
+        - { name: "GCC", version: "6", buildType: "Debug"       }
+        - { name: "GCC", version: "6", buildType: "Release"     }
+        - { name: "GCC", version: "7", buildType: "Debug"       }
+        - { name: "GCC", version: "7", buildType: "Release"     }
+        - { name: "GCC", version: "8", buildType: "Debug"       }
+        - { name: "GCC", version: "8", buildType: "Release"     }
+        - { name: "GCC", version: "9", buildType: "Debug"       }
+        - { name: "GCC", version: "9", buildType: "Release"     }
+        - { name: "CLANG", version: "3.9", buildType: "Debug"   }
+        - { name: "CLANG", version: "3.9", buildType: "Release" }
+        - { name: "CLANG", version: "4.0", buildType: "Debug"   }
+        - { name: "CLANG", version: "4.0", buildType: "Release" }
+        - { name: "CLANG", version: "5.0", buildType: "Debug"   }
+        - { name: "CLANG", version: "5.0", buildType: "Release" }
+        - { name: "CLANG", version: "6.0", buildType: "Debug"   }
+        - { name: "CLANG", version: "6.0", buildType: "Release" }
+        - { name: "CLANG", version: "7.0", buildType: "Debug"   }
+        - { name: "CLANG", version: "7.0", buildType: "Release" }
+        - { name: "CLANG", version: "8", buildType: "Debug"     }
+        - { name: "CLANG", version: "8", buildType: "Release"   }
+        - { name: "CLANG", version: "9", buildType: "Debug"     }
+        - { name: "CLANG", version: "9", buildType: "Release"   }
+    name: ${{ matrix.compiler.name }} ${{ matrix.compiler.version }} ${{ matrix.compiler.buildType }}
+    # if: ${{ env.SPLIT_BY_BUILD_TYPE }} == 'true'
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.8'
+      - name: Install Conan
+        run: |
+          pip install bincrafters_package_tools
+          conan user
+      - name: Run
+        env:
+          CONAN_USE_DOCKER: 1
+          CONAN_LOGIN_USERNAME: ${{ secrets.CONAN_LOGIN_USERNAME }}
+          CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
+          CONAN_BUILD_TYPES: ${{ matrix.compiler.buildType }}
+        run: |
+          export CONAN_${{ matrix.compiler.name }}_VERSIONS="${{ matrix.compiler.version }}"
+          python build.py
