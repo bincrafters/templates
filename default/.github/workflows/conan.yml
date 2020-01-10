@@ -5,7 +5,7 @@
 
 # Possible configurations:
 # env:
-#   splitByBuildTypes: "false"  # Possible values "false", "true", default: false
+#   SPLIT_BY_BUILD_TYPES: "false"  # Possible values "false", "true", default: "false"
 
 # - IMPORTANT NOTICE: These configurations are actually not completely working as expected yet due to GHA limitations
 # but it is important to set this values already so they can be consumed later
