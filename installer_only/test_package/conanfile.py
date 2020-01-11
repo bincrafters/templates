@@ -1,6 +1,4 @@
 from conans import ConanFile, tools
-import os
-
 
 class TestPackageConan(ConanFile):
 
