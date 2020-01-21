@@ -1,7 +1,7 @@
 parameters:
   conanLoginUsername: ""
   conanPassword: ""
-  pythonVersion: "3.7.5"
+  pythonVersion: "3.7.6"
   vsVersions: "14,15,16"  # Possible values: any combination of 14, 15, 16 or empty ("")
   appleClangVersions: ""  # Possible values: "10", "" (for no Apple Clang build jobs)
   splitByBuildTypes: "false"  # Possible values: "false", "true"
