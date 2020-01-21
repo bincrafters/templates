@@ -94,6 +94,7 @@ jobs:
           New-Item -ItemType SymbolicLink -Path "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" `
           -Target (get-command cmake).Path
         }
+        pip install --upgrade pip
         python --version
         pip --version
         echo (get-command cmake).Path
