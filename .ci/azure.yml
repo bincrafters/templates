@@ -85,7 +85,7 @@ jobs:
           Start-Process -PassThru -NoNewWindow cmd.exe '/c del /S /Q "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"';
         )
         $delete | Wait-Process
-        pip install --upgrade pip
+        python -m pip install --upgrade pip
         pip install --upgrade cmake
         if ($env:CONAN_VISUAL_VERSIONS -eq 15) {
           New-Item -ItemType SymbolicLink -Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" `
