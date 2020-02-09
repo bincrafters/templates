@@ -1,163 +1,215 @@
 parameters:
-  conanLoginUsername: ""
-  conanPassword: ""
-  pythonVersion: "3.7.6"
-  vsVersions: "14,15,16"  # Possible values: any combination of 14, 15, 16 or empty ("")
-  appleClangVersions: ""  # Possible values: "10", "" (for no Apple Clang build jobs)
-  splitByBuildTypes: "false"  # Possible values: "false", "true"
-  requireMoreDiskSpace: "false" # Possible values: "false", "true" - Deletes the entire Java stack for Windows images
+  - name: conanLoginUsername
+    type: string
+    default: ""
+  - name: conanPassword
+    type: string
+    default: ""
+  - name: conanUploadOnlyWhenStable
+    type: string
+    default: "true"
+  - name: jobsMaxParallel
+    type: number
+    default: 10
+  - name: pythonVersion
+    type: string
+    default: "3.7.6"
+  - name: vsVersions
+    type: string
+    default: "14,15,16"  # Possible values: any combination of 14, 15, 16 or empty ("")
+  - name: appleClangVersions
+    type: string
+    default: ""  # Possible values: "10", "" (for no Apple Clang build jobs)
+  - name: splitByBuildTypes
+    type: string
+    default: "false"  # Possible values: "false", "true"
+  - name: requireMoreDiskSpace
+    type: string
+    default: "false" # Possible values: "false", "true" - Deletes the entire Java stack for Windows images
+  - name: collectionsBasePath
+    type: string
+    default: "." # The path to where the recipe/s is/are
+  - name: collectionsProvideAsPythonRequires
+    type: object
+    default:
+      path: ""
+      reference: ""
+  - name: collectionsStages
+    type: object # A list of stage names
+    default:
+        - ""
+  - name: collectionsRecipes
+    type: object # A list of directories which each contains a single recipe
+    default:
+        - name: ""
+          stage: ""
+  # !!! IF YOU OVERRIDE THE FOLLOWING VALUES YOU ARE PROBABLY DOING SOMETHING WRONG !!!
+  - name: vsVersionsMapping
+    type: object
+    default:
+      - version: 14
+        name: 2015
+        image: vs2015-win2012r2
+      - version: 15
+        name: 2017
+        image: vs2017-win2016
+      - version: 16
+        name: 2019
+        image: windows-2019
 
-jobs:
-- ${{ if ne(parameters.appleClangVersions, '') }}:
-  - job: macOS
-    pool:
-      vmImage: $(AZP_BUILD_WORKER_IMAGE)
-    timeoutInMinutes: 120
-    steps:
-    - task: UsePythonVersion@0
-      inputs:
-        versionSpec: ${{ parameters.pythonVersion }}
-    - script: |
-        pip install --upgrade pip cmake
-        python --version
-        pip --version
-        which cmake
-        cmake --version
-        pip install bincrafters_package_tools
-        conan user
-      displayName: Install Conan
-    - script: |
-        python build.py
-      env:
-        CONAN_LOGIN_USERNAME: ${{ parameters.conanLoginUsername }}
-        CONAN_PASSWORD: ${{ parameters.conanPassword }}
-      displayName: Run
-    
-    strategy:
-      matrix:
-        ${{ if eq(parameters.splitByBuildTypes, 'true') }}:
-          ${{ if contains(parameters.appleClangVersions, 10) }}:
-            Apple-Clang 10 Release:
-              AZP_BUILD_WORKER_IMAGE: macOS-10.13
-              CONAN_APPLE_CLANG_VERSIONS: 10.0
-              CONAN_BUILD_TYPES: Release
-            Apple-Clang 10 Debug:
-              AZP_BUILD_WORKER_IMAGE: macOS-10.13
-              CONAN_APPLE_CLANG_VERSIONS: 10.0
-              CONAN_BUILD_TYPES: Debug
-        ${{ if ne(parameters.splitByBuildTypes, 'true') }}:
-          ${{ if contains(parameters.appleClangVersions, 10) }}:
-            Apple-Clang 10:
-              AZP_BUILD_WORKER_IMAGE: macOS-10.13
-              CONAN_APPLE_CLANG_VERSIONS: 10.0
+stages:
+- ${{ each stage in parameters.collectionsStages }}:
+  - stage: "${{ stage }}"
+    jobs:
+    - ${{ if ne(parameters.appleClangVersions, '') }}:
+      - job: macOS
+        pool:
+          vmImage: $(AZP_BUILD_WORKER_IMAGE)
+        timeoutInMinutes: 120
+        steps:
+        - task: UsePythonVersion@0
+          inputs:
+            versionSpec: ${{ parameters.pythonVersion }}
+        - script: |
+            pip install --upgrade pip cmake
+            python --version
+            pip --version
+            which cmake
+            cmake --version
+            pip install bincrafters_package_tools
+            conan user
+          displayName: Install Conan
+        - script: |
+            python build.py
+          env:
+            CONAN_LOGIN_USERNAME: ${{ parameters.conanLoginUsername }}
+            CONAN_PASSWORD: ${{ parameters.conanPassword }}
+          displayName: Run
+        
+        strategy:
+          maxParallel: ${{ parameters.jobsMaxParallel }}
+          matrix:
+            ${{ if eq(parameters.splitByBuildTypes, 'true') }}:
+              ${{ if contains(parameters.appleClangVersions, 10) }}:
+                Apple-Clang 10 Release:
+                  AZP_BUILD_WORKER_IMAGE: macOS-10.13
+                  CONAN_APPLE_CLANG_VERSIONS: 10.0
+                  CONAN_BUILD_TYPES: Release
+                Apple-Clang 10 Debug:
+                  AZP_BUILD_WORKER_IMAGE: macOS-10.13
+                  CONAN_APPLE_CLANG_VERSIONS: 10.0
+                  CONAN_BUILD_TYPES: Debug
+            ${{ if ne(parameters.splitByBuildTypes, 'true') }}:
+              ${{ if contains(parameters.appleClangVersions, 10) }}:
+                Apple-Clang 10:
+                  AZP_BUILD_WORKER_IMAGE: macOS-10.13
+                  CONAN_APPLE_CLANG_VERSIONS: 10.0
 
-- ${{ if ne(parameters.vsVersions, '') }}:
-  - job: Windows
-    pool:
-      vmImage: $(AZP_BUILD_WORKER_IMAGE)
-    timeoutInMinutes: 180
-    steps:
-    - task: UsePythonVersion@0
-      condition: ne(variables.CONAN_VISUAL_VERSIONS, 14)
-      inputs:
-        versionSpec: ${{ parameters.pythonVersion }}
-    - task: PowerShell@2
-      condition: eq(variables.CONAN_VISUAL_VERSIONS, 14)
-      inputs:
-        targetType: inline
-        script: |
-          Invoke-WebRequest https://aka.ms/nugetclidl -OutFile C:\nuget.exe
-          C:\nuget.exe install python -Version ${{ parameters.pythonVersion }} -ExcludeVersion -OutputDirectory C:\
-          Invoke-WebRequest -OutFile get-pip.py https://bootstrap.pypa.io/get-pip.py
-          C:\python\tools\python.exe get-pip.py
-          Write-Host "##vso[task.prependpath]C:\python\tools"
-          Write-Host "##vso[task.prependpath]C:\python\tools\Scripts"
-          Remove-Item C:\nuget.exe
-          Remove-Item get-pip.py
-      displayName: UsePythonVersion for VS 2015
-    - powershell: |
-        $delete = $(
-          Start-Process -PassThru -NoNewWindow cmd.exe '/c rmdir /S /Q "C:\ProgramData\chocolatey"';
-          Start-Process -PassThru -NoNewWindow cmd.exe '/c rmdir /S /Q "C:\Strawberry\"';
-          Start-Process -PassThru -NoNewWindow cmd.exe '/c rmdir /S /Q "C:\Program Files (x86)\CMake\bin"';
-          Start-Process -PassThru -NoNewWindow cmd.exe '/c rmdir /S /Q "C:\Program Files\CMake\bin"';
-          Start-Process -PassThru -NoNewWindow cmd.exe '/c del /S /Q "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"';
-          Start-Process -PassThru -NoNewWindow cmd.exe '/c del /S /Q "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"';
-        )
-        $delete | Wait-Process
-        python -m pip install --upgrade pip
-        pip install --upgrade cmake
-        if ($env:CONAN_VISUAL_VERSIONS -eq 15) {
-          New-Item -ItemType SymbolicLink -Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" `
-          -Target (get-command cmake).Path
-        }
-        if ($env:CONAN_VISUAL_VERSIONS -eq 16) {
-          New-Item -ItemType SymbolicLink -Path "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" `
-          -Target (get-command cmake).Path
-        }
-        python --version
-        pip --version
-        echo (get-command cmake).Path
-        cmake --version
-        pip install bincrafters_package_tools
-        Start-Process -Wait -NoNewWindow cmd.exe '/c conan user'
-      displayName: Install Conan
-    - powershell: |
-        if (($env:CONAN_VISUAL_VERSIONS -eq 14) -And ('${{ parameters.requireMoreDiskSpace }}' -eq 'true')) {
-          Write-Host "requireMoreDiskSpace is True - Delete Java stack for more disk space"
-          Start-Process -NoNewWindow cmd.exe "/c (del /f/s/q C:\java\ > nul) && (rmdir /S /Q C:\java\)" 
-        }
-        if (($env:CONAN_VISUAL_VERSIONS -ne 14) -And ('${{ parameters.requireMoreDiskSpace }}' -eq 'true')) {
-          Write-Host "requireMoreDiskSpace is True - Delete Java stack for more disk space"
-          Start-Process -NoNewWindow cmd.exe '/c (del /f/s/q "C:\Program Files\Java" > nul) && (rmdir /S /Q "C:\Program Files\Java")'
-          Start-Process -NoNewWindow cmd.exe '/c (del /f/s/q "C:\Program Files\dotnet\sdk\" > nul) && (rmdir /S /Q "C:\Program Files\dotnet\sdk\")' 
-        }
-        python build.py
-      env:
-        CONAN_LOGIN_USERNAME: ${{ parameters.conanLoginUsername }}
-        CONAN_PASSWORD: ${{ parameters.conanPassword }}
-      displayName: Run
-
-    strategy:
-      matrix:
-        ${{ if eq(parameters.splitByBuildTypes, 'true') }}:
-          ${{ if contains(parameters.vsVersions, 14) }}:
-            VS 2015 Release:
-              AZP_BUILD_WORKER_IMAGE: vs2015-win2012r2
-              CONAN_VISUAL_VERSIONS: 14
-              CONAN_BUILD_TYPES: Release
-            VS 2015 Debug:
-              AZP_BUILD_WORKER_IMAGE: vs2015-win2012r2
-              CONAN_VISUAL_VERSIONS: 14
-              CONAN_BUILD_TYPES: Debug
-          ${{ if contains(parameters.vsVersions, 15) }}:
-            VS 2017 Release:
-              AZP_BUILD_WORKER_IMAGE: vs2017-win2016
-              CONAN_VISUAL_VERSIONS: 15
-              CONAN_BUILD_TYPES: Release
-            VS 2017 Debug:
-              AZP_BUILD_WORKER_IMAGE: vs2017-win2016
-              CONAN_VISUAL_VERSIONS: 15
-              CONAN_BUILD_TYPES: Debug
-          ${{ if contains(parameters.vsVersions, 16) }}:
-            VS 2019 Release:
-              AZP_BUILD_WORKER_IMAGE: windows-2019
-              CONAN_VISUAL_VERSIONS: 16
-              CONAN_BUILD_TYPES: Release
-            VS 2019 Debug:
-              AZP_BUILD_WORKER_IMAGE: windows-2019
-              CONAN_VISUAL_VERSIONS: 16
-              CONAN_BUILD_TYPES: Debug
-        ${{ if ne(parameters.splitByBuildTypes, 'true') }}:
-          ${{ if contains(parameters.vsVersions, 14) }}:
-            VS 2015:
-              AZP_BUILD_WORKER_IMAGE: vs2015-win2012r2
-              CONAN_VISUAL_VERSIONS: 14
-          ${{ if contains(parameters.vsVersions, 15) }}:
-            VS 2017:
-              AZP_BUILD_WORKER_IMAGE: vs2017-win2016
-              CONAN_VISUAL_VERSIONS: 15
-          ${{ if contains(parameters.vsVersions, 16) }}:
-            VS 2019:
-              AZP_BUILD_WORKER_IMAGE: windows-2019
-              CONAN_VISUAL_VERSIONS: 16
+    - ${{ if ne(parameters.vsVersions, '') }}:
+      - job: Windows
+        pool:
+          vmImage: $(AZP_BUILD_WORKER_IMAGE)
+        timeoutInMinutes: 180
+        steps:
+        - task: UsePythonVersion@0
+          condition: ne(variables.CONAN_VISUAL_VERSIONS, 14)
+          inputs:
+            versionSpec: ${{ parameters.pythonVersion }}
+        - task: PowerShell@2
+          condition: eq(variables.CONAN_VISUAL_VERSIONS, 14)
+          inputs:
+            targetType: inline
+            script: |
+              Invoke-WebRequest https://aka.ms/nugetclidl -OutFile C:\nuget.exe
+              C:\nuget.exe install python -Version ${{ parameters.pythonVersion }} -ExcludeVersion -OutputDirectory C:\
+              Invoke-WebRequest -OutFile get-pip.py https://bootstrap.pypa.io/get-pip.py
+              C:\python\tools\python.exe get-pip.py
+              Write-Host "##vso[task.prependpath]C:\python\tools"
+              Write-Host "##vso[task.prependpath]C:\python\tools\Scripts"
+              Remove-Item C:\nuget.exe
+              Remove-Item get-pip.py
+          displayName: UsePythonVersion for VS 2015
+        - powershell: |
+            $delete = $(
+              Start-Process -PassThru -NoNewWindow cmd.exe '/c rmdir /S /Q "C:\ProgramData\chocolatey"';
+              Start-Process -PassThru -NoNewWindow cmd.exe '/c rmdir /S /Q "C:\Strawberry\"';
+              Start-Process -PassThru -NoNewWindow cmd.exe '/c rmdir /S /Q "C:\Program Files (x86)\CMake\bin"';
+              Start-Process -PassThru -NoNewWindow cmd.exe '/c rmdir /S /Q "C:\Program Files\CMake\bin"';
+              Start-Process -PassThru -NoNewWindow cmd.exe '/c del /S /Q "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"';
+              Start-Process -PassThru -NoNewWindow cmd.exe '/c del /S /Q "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"';
+            )
+            $delete | Wait-Process
+            python -m pip install --upgrade pip
+            pip install --upgrade cmake
+            if ($env:CONAN_VISUAL_VERSIONS -eq 15) {
+              New-Item -ItemType SymbolicLink -Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" `
+              -Target (get-command cmake).Path
+            }
+            if ($env:CONAN_VISUAL_VERSIONS -eq 16) {
+              New-Item -ItemType SymbolicLink -Path "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" `
+              -Target (get-command cmake).Path
+            }
+            python --version
+            pip --version
+            echo (get-command cmake).Path
+            cmake --version
+            pip install bincrafters_package_tools
+            Start-Process -Wait -NoNewWindow cmd.exe '/c conan user'
+          displayName: Install Conan
+        - powershell: |
+            if (($env:CONAN_VISUAL_VERSIONS -eq 14) -And ('${{ parameters.requireMoreDiskSpace }}' -eq 'true')) {
+              Write-Host "requireMoreDiskSpace is True - Delete Java stack for more disk space"
+              Start-Process -NoNewWindow cmd.exe "/c (del /f/s/q C:\java\ > nul) && (rmdir /S /Q C:\java\)" 
+            }
+            if (($env:CONAN_VISUAL_VERSIONS -ne 14) -And ('${{ parameters.requireMoreDiskSpace }}' -eq 'true')) {
+              Write-Host "requireMoreDiskSpace is True - Delete Java stack for more disk space"
+              Start-Process -NoNewWindow cmd.exe '/c (del /f/s/q "C:\Program Files\Java" > nul) && (rmdir /S /Q "C:\Program Files\Java")'
+              Start-Process -NoNewWindow cmd.exe '/c (del /f/s/q "C:\Program Files\dotnet\sdk\" > nul) && (rmdir /S /Q "C:\Program Files\dotnet\sdk\")' 
+            }
+            if ('${{ parameters.collectionsProvideAsPythonRequires.path }}' -ne '') {
+              conan export ${{ parameters.collectionsProvideAsPythonRequires.path }} ${{ parameters.collectionsProvideAsPythonRequires.reference }}
+            }
+            $rootDir = $pwd.path
+            cd $env:CONAN_RECIPE_DIRECTORY
+            if ($env:RECIPE_BUILD_TYPE -eq 'header_only') {
+              python ('{0}\build_header_only.py' -f $rootDir)
+            } else {
+            python ('{0}\build.py' -f $rootDir)
+            }
+          env:
+            CONAN_LOGIN_USERNAME: ${{ parameters.conanLoginUsername }}
+            CONAN_PASSWORD: ${{ parameters.conanPassword }}
+            CONAN_UPLOAD_ONLY_WHEN_STABLE: ${{ parameters.conanUploadOnlyWhenStable }}
+          displayName: Run
+        strategy:
+          maxParallel: ${{ parameters.jobsMaxParallel }}
+          matrix:
+            ${{ each recipe in parameters.collectionsRecipes }}:
+              ${{ if eq(recipe.stage, stage) }}:
+                ${{ if eq(recipe.type, 'header_only') }}:
+                  VS 2019 ${{ recipe.name }}:
+                    AZP_BUILD_WORKER_IMAGE: windows-2019
+                    RECIPE_BUILD_TYPE: header_only
+                    CONAN_VISUAL_VERSIONS: 16
+                    CONAN_RECIPE_DIRECTORY: ${{ format('{0}\{1}', parameters.collectionsBasePath, recipe.name) }}
+                ${{ if ne(recipe.type, 'header_only') }}:
+                  ${{ if eq(parameters.splitByBuildTypes, 'true') }}:
+                    ${{ each vs in parameters.vsVersionsMapping }}:
+                      ${{ if contains(parameters.vsVersions, vs.version) }}:
+                        VS ${{ vs.name }} Release ${{ recipe.name }}:
+                          AZP_BUILD_WORKER_IMAGE: ${{ vs.image }}
+                          CONAN_VISUAL_VERSIONS: ${{ vs.version }}
+                          CONAN_BUILD_TYPES: Release
+                          CONAN_RECIPE_DIRECTORY: ${{ format('{0}\{1}', parameters.collectionsBasePath, recipe.name) }}
+                        VS ${{ vs.name }} Debug ${{ recipe.name }}:
+                          AZP_BUILD_WORKER_IMAGE: ${{ vs.image }}
+                          CONAN_VISUAL_VERSIONS: ${{ vs.version }}
+                          CONAN_BUILD_TYPES: Debug
+                          CONAN_RECIPE_DIRECTORY: ${{ format('{0}\{1}', parameters.collectionsBasePath, recipe.name) }}
+                  ${{ if ne(parameters.splitByBuildTypes, 'true') }}:
+                    ${{ each vs in parameters.vsVersionsMapping }}:
+                      ${{ if contains(parameters.vsVersions, vs.version) }}:
+                        VS ${{ vs.name }} ${{ recipe.name }}:
+                          AZP_BUILD_WORKER_IMAGE: ${{ vs.image }}
+                          CONAN_VISUAL_VERSIONS: ${{ vs.version }}
+                          CONAN_RECIPE_DIRECTORY: ${{ format('{0}\{1}', parameters.collectionsBasePath, recipe.name) }}
