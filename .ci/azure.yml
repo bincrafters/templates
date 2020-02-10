@@ -61,7 +61,7 @@ parameters:
     default:
       - version: 10.0
         image: macOS-10.14
-        path: /Applications/Xcode_10.1.app
+        path: /Applications/Xcode_10.3.app
 
 stages:
 - ${{ each stage in parameters.collectionsStages }}:
