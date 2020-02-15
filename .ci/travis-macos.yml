@@ -1,55 +1,154 @@
+# Documentation of global variables which influrence the generating of the build matrix:
+# splitByBuildTypes: "true", "false" - default value: "false"
+# CONAN_TOTAL_PAGES: not defined (implies 1 page), "2" - default value: not defined (implies 1 page)
+
 osx: &osx
   os: osx
   language: generic
 
 matrix:
   include:
-    # splitByBuildTypes != true
+    # splitByBuildTypes != true AND CONAN_TOTAL_PAGES=1
     - stage: default
       <<: *osx
       osx_image: xcode9.4
       env: CONAN_APPLE_CLANG_VERSIONS=9.1
-      if: NOT env(splitByBuildTypes) = "true"
+      if: NOT env(splitByBuildTypes) = "true" AND NOT env(CONAN_TOTAL_PAGES) IS present
     - stage: default
       <<: *osx
       osx_image: xcode10.3
       env: CONAN_APPLE_CLANG_VERSIONS=10.0
-      if: NOT env(splitByBuildTypes) = "true"
+      if: NOT env(splitByBuildTypes) = "true" AND NOT env(CONAN_TOTAL_PAGES) IS present
     - stage: default
       <<: *osx
       osx_image: xcode11.3
       env: CONAN_APPLE_CLANG_VERSIONS=11.0
-      if: NOT env(splitByBuildTypes) = "true"
-    # splitByBuildTypes == True
+      if: NOT env(splitByBuildTypes) = "true" AND NOT env(CONAN_TOTAL_PAGES) IS present
+
+    # splitByBuildTypes != true AND CONAN_TOTAL_PAGES=2
+    - stage: default
+      <<: *osx
+      osx_image: xcode9.4
+      env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_CURRENT_PAGE=1
+      if: NOT env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    - stage: default
+      <<: *osx
+      osx_image: xcode9.4
+      env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_CURRENT_PAGE=2
+      if: NOT env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    - stage: default
+      <<: *osx
+      osx_image: xcode10.3
+      env: CONAN_APPLE_CLANG_VERSIONS=10.0 CONAN_CURRENT_PAGE=1
+      if: NOT env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    - stage: default
+      <<: *osx
+      osx_image: xcode10.3
+      env: CONAN_APPLE_CLANG_VERSIONS=10.0 CONAN_CURRENT_PAGE=2
+      if: NOT env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    - stage: default
+      <<: *osx
+      osx_image: xcode11.3
+      env: CONAN_APPLE_CLANG_VERSIONS=11.0 CONAN_CURRENT_PAGE=1
+      if: NOT env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    - stage: default
+      <<: *osx
+      osx_image: xcode11.3
+      env: CONAN_APPLE_CLANG_VERSIONS=11.0 CONAN_CURRENT_PAGE=2
+      if: NOT env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    
+    # splitByBuildTypes == True AND CONAN_TOTAL_PAGES=1
     - stage: default
       <<: *osx
       osx_image: xcode9.4
       env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_BUILD_TYPES=Debug
-      if: env(splitByBuildTypes) = "true"
+      if: env(splitByBuildTypes) = "true" AND NOT env(CONAN_TOTAL_PAGES) IS present
     - stage: default
       <<: *osx
       osx_image: xcode9.4
       env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_BUILD_TYPES=Release
-      if: env(splitByBuildTypes) = "true"
+      if: env(splitByBuildTypes) = "true" AND NOT env(CONAN_TOTAL_PAGES) IS present
     - stage: default
       <<: *osx
       osx_image: xcode10.3
       env: CONAN_APPLE_CLANG_VERSIONS=10.0 CONAN_BUILD_TYPES=Debug
-      if: env(splitByBuildTypes) = "true"
+      if: env(splitByBuildTypes) = "true" AND NOT env(CONAN_TOTAL_PAGES) IS present
     - stage: default
       <<: *osx
       osx_image: xcode10.3
       env: CONAN_APPLE_CLANG_VERSIONS=10.0 CONAN_BUILD_TYPES=Release
-      if: env(splitByBuildTypes) = "true"
+      if: env(splitByBuildTypes) = "true" AND NOT env(CONAN_TOTAL_PAGES) IS present
     - stage: default
       <<: *osx
       osx_image: xcode11.3
       env: CONAN_APPLE_CLANG_VERSIONS=11.0 CONAN_BUILD_TYPES=Debug
-      if: env(splitByBuildTypes) = "true"
+      if: env(splitByBuildTypes) = "true" AND NOT env(CONAN_TOTAL_PAGES) IS present
     - stage: default
       <<: *osx
       osx_image: xcode11.3
       env: CONAN_APPLE_CLANG_VERSIONS=11.0 CONAN_BUILD_TYPES=Release
-      if: env(splitByBuildTypes) = "true"
+      if: env(splitByBuildTypes) = "true" AND NOT env(CONAN_TOTAL_PAGES) IS present
+
+    # splitByBuildTypes == True AND CONAN_TOTAL_PAGES=2
+    - stage: default
+      <<: *osx
+      osx_image: xcode9.4
+      env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_BUILD_TYPES=Debug CONAN_CURRENT_PAGE=1
+      if: env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    - stage: default
+      <<: *osx
+      osx_image: xcode9.4
+      env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_BUILD_TYPES=Debug CONAN_CURRENT_PAGE=2
+      if: env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    - stage: default
+      <<: *osx
+      osx_image: xcode9.4
+      env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_BUILD_TYPES=Release CONAN_CURRENT_PAGE=1
+      if: env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    - stage: default
+      <<: *osx
+      osx_image: xcode9.4
+      env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_BUILD_TYPES=Release CONAN_CURRENT_PAGE=2
+      if: env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    - stage: default
+      <<: *osx
+      osx_image: xcode10.3
+      env: CONAN_APPLE_CLANG_VERSIONS=10.0 CONAN_BUILD_TYPES=Debug CONAN_CURRENT_PAGE=1
+      if: env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    - stage: default
+      <<: *osx
+      osx_image: xcode10.3
+      env: CONAN_APPLE_CLANG_VERSIONS=10.0 CONAN_BUILD_TYPES=Debug CONAN_CURRENT_PAGE=2
+      if: env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    - stage: default
+      <<: *osx
+      osx_image: xcode10.3
+      env: CONAN_APPLE_CLANG_VERSIONS=10.0 CONAN_BUILD_TYPES=Release CONAN_CURRENT_PAGE=1
+      if: env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    - stage: default
+      <<: *osx
+      osx_image: xcode10.3
+      env: CONAN_APPLE_CLANG_VERSIONS=10.0 CONAN_BUILD_TYPES=Release CONAN_CURRENT_PAGE=2
+      if: env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    - stage: default
+      <<: *osx
+      osx_image: xcode11.3
+      env: CONAN_APPLE_CLANG_VERSIONS=11.0 CONAN_BUILD_TYPES=Debug CONAN_CURRENT_PAGE=1
+      if: env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    - stage: default
+      <<: *osx
+      osx_image: xcode11.3
+      env: CONAN_APPLE_CLANG_VERSIONS=11.0 CONAN_BUILD_TYPES=Debug CONAN_CURRENT_PAGE=2
+      if: env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    - stage: default
+      <<: *osx
+      osx_image: xcode11.3
+      env: CONAN_APPLE_CLANG_VERSIONS=11.0 CONAN_BUILD_TYPES=Release CONAN_CURRENT_PAGE=1
+      if: env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
+    - stage: default
+      <<: *osx
+      osx_image: xcode11.3
+      env: CONAN_APPLE_CLANG_VERSIONS=11.0 CONAN_BUILD_TYPES=Release CONAN_CURRENT_PAGE=2
+      if: env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
 
 import: .ci/internal/travis-steps.yml
