@@ -4,17 +4,52 @@ osx: &osx
 
 matrix:
   include:
+    # splitByBuildTypes != true
     - stage: default
       <<: *osx
       osx_image: xcode9.4
       env: CONAN_APPLE_CLANG_VERSIONS=9.1
+      if: NOT env(splitByBuildTypes) = "true"
     - stage: default
       <<: *osx
       osx_image: xcode10.3
       env: CONAN_APPLE_CLANG_VERSIONS=10.0
+      if: NOT env(splitByBuildTypes) = "true"
     - stage: default
       <<: *osx
       osx_image: xcode11.3
       env: CONAN_APPLE_CLANG_VERSIONS=11.0
+      if: NOT env(splitByBuildTypes) = "true"
+    # splitByBuildTypes == True
+    - stage: default
+      <<: *osx
+      osx_image: xcode9.4
+      env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_BUILD_TYPES=Debug
+      if: env(splitByBuildTypes) = "true"
+    - stage: default
+      <<: *osx
+      osx_image: xcode9.4
+      env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_BUILD_TYPES=Release
+      if: env(splitByBuildTypes) = "true"
+    - stage: default
+      <<: *osx
+      osx_image: xcode10.3
+      env: CONAN_APPLE_CLANG_VERSIONS=10.0 CONAN_BUILD_TYPES=Debug
+      if: env(splitByBuildTypes) = "true"
+    - stage: default
+      <<: *osx
+      osx_image: xcode10.3
+      env: CONAN_APPLE_CLANG_VERSIONS=10.0 CONAN_BUILD_TYPES=Release
+      if: env(splitByBuildTypes) = "true"
+    - stage: default
+      <<: *osx
+      osx_image: xcode11.3
+      env: CONAN_APPLE_CLANG_VERSIONS=11.0 CONAN_BUILD_TYPES=Debug
+      if: env(splitByBuildTypes) = "true"
+    - stage: default
+      <<: *osx
+      osx_image: xcode11.3
+      env: CONAN_APPLE_CLANG_VERSIONS=11.0 CONAN_BUILD_TYPES=Release
+      if: env(splitByBuildTypes) = "true"
 
 import: .ci/internal/travis-steps.yml
