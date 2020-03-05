@@ -14,12 +14,18 @@ parameters:
   - name: pythonVersion
     type: string
     default: "3.7.6"
+  - name: enableVsBuilds
+    type: boolean
+    default: true
   - name: vsVersions
     type: string
-    default: "14,15,16"  # Possible values: any combination of 14, 15, 16 or empty ("")
+    default: "14,15,16"  # Possible values: any combination of 14, 15, 16
+  - name: enableAppleClangBuilds
+    type: boolean
+    default: false
   - name: appleClangVersions
     type: string
-    default: ""  # Possible values: "10", "" (for no Apple Clang build jobs)
+    default: "10,11"  # Possible values: any combination of "10", "11"
   - name: splitByBuildTypes
     type: string
     default: "false"  # Possible values: "false", "true"
@@ -70,7 +76,7 @@ stages:
 - ${{ each stage in parameters.collectionsStages }}:
   - stage: "${{ stage }}"
     jobs:
-    - ${{ if ne(parameters.appleClangVersions, '') }}:
+    - ${{ if eq(parameters.enableAppleClangBuilds, 'true') }}:
       - job: macOS
         pool:
           vmImage: $(AZP_BUILD_WORKER_IMAGE)
@@ -124,7 +130,7 @@ stages:
                     AZP_XCODE_PATH: ${{ clang.path }}
                     CONAN_APPLE_CLANG_VERSIONS: ${{ clang.version }}
 
-    - ${{ if ne(parameters.vsVersions, '') }}:
+    - ${{ if eq(parameters.enableVsBuilds, 'true') }}:
       - job: Windows
         pool:
           vmImage: $(AZP_BUILD_WORKER_IMAGE)
