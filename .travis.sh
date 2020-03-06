@@ -26,6 +26,7 @@ cd ..
 cp -v "conandata.yml" "${tmpdir}"
 cp -rv ".github" "${tmpdir}"
 cp -rv ".gitignore" "${tmpdir}"
+cp -rv ".gitattributes" "${tmpdir}"
 
 # Move specific files to tmp dir
 cp -rv "${template}/." "${tmpdir}"
