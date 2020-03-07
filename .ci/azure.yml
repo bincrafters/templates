@@ -199,7 +199,12 @@ stages:
             if ($env:RECIPE_BUILD_TYPE -eq 'header_only') {
               python ('{0}\build_header_only.py' -f $rootDir)
             } else {
-            python ('{0}\build.py' -f $rootDir)
+              if (Test-Path "$($rootDir)\build.py") {
+                python ('{0}\build.py' -f $rootDir)
+              } else {
+                pip install -i https://test.pypi.org/simple/ bincrafters-package-tools
+                bincrafters-package-tools --auto
+              }
             }
           env:
             CONAN_LOGIN_USERNAME: ${{ parameters.conanLoginUsername }}
