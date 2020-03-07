@@ -178,6 +178,7 @@ stages:
             pip --version
             echo (get-command cmake).Path
             cmake --version
+            pip install conan-package-tools
             pip install -i https://test.pypi.org/simple/ bincrafters-package-tools==0.23.0b1
             Start-Process -Wait -NoNewWindow cmd.exe '/c conan user'
           displayName: Install Conan

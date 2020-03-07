@@ -20,6 +20,7 @@ install: |
     pyenv activate conan;
     pip install cmake --upgrade;
   fi
+  pip install conan-package-tools
   pip install -i https://test.pypi.org/simple/ bincrafters-package-tools==0.23.0b1
   conan user
 
