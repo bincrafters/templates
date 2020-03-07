@@ -202,7 +202,7 @@ stages:
               if (Test-Path "$($rootDir)\build.py") {
                 python ('{0}\build.py' -f $rootDir)
               } else {
-                pip install -i https://test.pypi.org/simple/ bincrafters-package-tools
+                pip install -i https://test.pypi.org/simple/ bincrafters-package-tools==0.23.0b1
                 bincrafters-package-tools --auto
               }
             }
