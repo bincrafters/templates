@@ -24,8 +24,4 @@ install: |
   conan user
 
 script: |
-  if [[ -f "build.py" ]]; then
-    python build.py;
-  else
-    bincrafters-package-tools --auto ;
-  fi;
+  bincrafters-package-tools --auto

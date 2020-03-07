@@ -1,4 +1,4 @@
-# bincrafters-conventions:gha-workflow-version:2
+# bincrafters-conventions:gha-workflow-version:3
 # You can add custom environment variables above the version tag
 # Do not modify the tag or anything below the tag
 # This script gets automatically updated
@@ -52,11 +52,7 @@ jobs:
   #         CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
   #       run: |
   #         export CONAN_${{ matrix.compiler.name }}_VERSIONS="${{ matrix.compiler.version }}"
-  #         if [[ -f "build.py" ]]; then 
-  #           python build.py;
-  #         else
-  #           bincrafters-package-tools --auto;
-  #         fi
+  #         bincrafters-package-tools --auto
   splitByBuildTypesTrue:
     runs-on: ubuntu-18.04
     strategy:
@@ -108,8 +104,4 @@ jobs:
           CONAN_BUILD_TYPES: ${{ matrix.compiler.buildType }}
         run: |
           export CONAN_${{ matrix.compiler.name }}_VERSIONS="${{ matrix.compiler.version }}"
-          if [[ -f "build.py" ]]; then 
-            python build.py;
-          else
-            bincrafters-package-tools --auto;
-          fi
+          bincrafters-package-tools --auto

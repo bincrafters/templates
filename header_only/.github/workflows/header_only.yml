@@ -21,7 +21,7 @@ jobs:
           conan user
       - name: Run
         run: |
-          python build.py
+          bincrafters-package-tools --auto
 
   Windows:
     runs-on: windows-latest
@@ -38,4 +38,4 @@ jobs:
           conan user
       - name: Run
         run: |
-          python build.py
+          bincrafters-package-tools --auto

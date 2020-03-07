@@ -15,4 +15,4 @@ install:
   - conan user # It creates the conan data directory
 
 build_script:
-  - python build.py
+  - bincrafters-package-tools --auto

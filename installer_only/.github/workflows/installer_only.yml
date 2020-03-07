@@ -3,7 +3,6 @@ on: [push, pull_request]
 env:
   CONAN_LOGIN_USERNAME: ${{ secrets.CONAN_LOGIN_USERNAME }}
   CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
-  ARCH: x86_64
 
 jobs:
   Linux:
@@ -22,7 +21,7 @@ jobs:
           conan user
       - name: Run
         run: |
-          python build.py
+          bincrafters-package-tools --auto
 
   Windows:
     runs-on: windows-latest
@@ -39,4 +38,4 @@ jobs:
           conan user
       - name: Run
         run: |
-          python build.py
+          bincrafters-package-tools --auto
