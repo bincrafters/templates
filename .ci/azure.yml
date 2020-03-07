@@ -178,7 +178,7 @@ stages:
             pip --version
             echo (get-command cmake).Path
             cmake --version
-            pip install bincrafters_package_tools
+            pip install -i https://test.pypi.org/simple/ bincrafters-package-tools==0.23.0b1
             Start-Process -Wait -NoNewWindow cmd.exe '/c conan user'
           displayName: Install Conan
         - powershell: |
@@ -202,7 +202,6 @@ stages:
               if (Test-Path "$($rootDir)\build.py") {
                 python ('{0}\build.py' -f $rootDir)
               } else {
-                pip install -i https://test.pypi.org/simple/ bincrafters-package-tools==0.23.0b1
                 bincrafters-package-tools --auto
               }
             }

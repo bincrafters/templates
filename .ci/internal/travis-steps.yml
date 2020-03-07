@@ -20,8 +20,12 @@ install: |
     pyenv activate conan;
     pip install cmake --upgrade;
   fi
-  pip install bincrafters_package_tools
+  pip install -i https://test.pypi.org/simple/ bincrafters-package-tools==0.23.0b1
   conan user
 
 script: |
-  python build.py
+  if [[ test -f "build.py" ]]; then
+    python build.py;
+  else
+    bincrafters-package-tools --auto
+  fi;
