@@ -1,11 +1,11 @@
-# bincrafters-conventions:gha-workflow-version:1
+# bincrafters-conventions:gha-workflow-version:2
 # You can add custom environment variables above the version tag
 # Do not modify the tag or anything below the tag
 # This script gets automatically updated
 
 # Possible configurations:
 # env:
-#   SPLIT_BY_BUILD_TYPES: "false"  # Possible values "false", "true", default: "false"
+#   splitByBuildTypes: "false"  # Possible values "false", "true", default: false
 
 # - IMPORTANT NOTICE: These configurations are actually not completely working as expected yet due to GHA limitations
 # but it is important to set this values already so they can be consumed later
@@ -35,7 +35,7 @@ jobs:
   #       - { name: "CLANG", version: "8"   }
   #       - { name: "CLANG", version: "9"   }
   #   name: ${{ matrix.compiler.name }} ${{ matrix.compiler.version }}
-  #   if: ${{ env.SPLIT_BY_BUILD_TYPES }} != 'true'
+  #   if: ${{ env.splitByBuildTypes }} != 'true'
   #   steps:
   #     - uses: actions/checkout@v1
   #     - uses: actions/setup-python@v1
@@ -52,7 +52,11 @@ jobs:
   #         CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
   #       run: |
   #         export CONAN_${{ matrix.compiler.name }}_VERSIONS="${{ matrix.compiler.version }}"
-  #         python build.py
+  #         if [[ -f "build.py" ]]; then 
+  #           python build.py;
+  #         else
+  #           bincrafters-package-tools --auto;
+  #         fi
   splitByBuildTypesTrue:
     runs-on: ubuntu-18.04
     strategy:
@@ -86,7 +90,7 @@ jobs:
         - { name: "CLANG", version: "9", buildType: "Debug"     }
         - { name: "CLANG", version: "9", buildType: "Release"   }
     name: ${{ matrix.compiler.name }} ${{ matrix.compiler.version }} ${{ matrix.compiler.buildType }}
-    # if: ${{ env.SPLIT_BY_BUILD_TYPE }} == 'true'
+    # if: ${{ env.splitByBuildTypes }} == 'true'
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-python@v1
@@ -94,7 +98,7 @@ jobs:
           python-version: '3.8'
       - name: Install Conan
         run: |
-          pip install bincrafters_package_tools
+          pip install bincrafters-package-tools
           conan user
       - name: Run
         env:
@@ -104,4 +108,8 @@ jobs:
           CONAN_BUILD_TYPES: ${{ matrix.compiler.buildType }}
         run: |
           export CONAN_${{ matrix.compiler.name }}_VERSIONS="${{ matrix.compiler.version }}"
-          python build.py
+          if [[ -f "build.py" ]]; then 
+            python build.py;
+          else
+            bincrafters-package-tools --auto;
+          fi
