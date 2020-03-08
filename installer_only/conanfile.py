@@ -24,12 +24,10 @@ class LibnameConan(ConanFile):
         os.rename(extracted_dir, self._source_subfolder)
 
     def _configure_cmake(self):
-        if self._cmake:
-            return self._cmake  
-            
-        self._cmake = CMake(self)
-        self._cmake.definitions["BUILD_TESTS"] = False  # example
-        self._cmake.configure(build_folder=self._build_subfolder)
+        if not self._cmake:
+            self._cmake = CMake(self)
+            self._cmake.definitions["BUILD_TESTS"] = False  # example
+            self._cmake.configure(build_folder=self._build_subfolder)
         return self._cmake
 
     def build(self):
