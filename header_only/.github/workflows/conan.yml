@@ -1,3 +1,6 @@
+env:
+  recipeType: "header_only"
+
 # bincrafters-conventions:gha-workflow-version:4
 # You can add custom environment variables above the version tag
 # Do not modify the tag or anything below the tag

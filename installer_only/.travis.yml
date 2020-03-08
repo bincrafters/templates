@@ -1,1 +1,0 @@
-import: bincrafters/templates:.ci/travis-macos-installer.yml@master
