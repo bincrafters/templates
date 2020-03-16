@@ -19,7 +19,7 @@ parameters:
     default: true
   - name: vsVersions
     type: string
-    default: "14,15,16"  # Possible values: any combination of 14, 15, 16
+    default: "15,16"  # Possible values: any combination of 15, 16
   - name: enableAppleClangBuilds
     type: boolean
     default: false
@@ -53,9 +53,6 @@ parameters:
   - name: vsVersionsMapping
     type: object
     default:
-      - version: 14
-        name: 2015
-        image: vs2015-win2012r2
       - version: 15
         name: 2017
         image: vs2017-win2016
@@ -100,11 +97,7 @@ stages:
             fi;
             sudo xcode-select -switch $AZP_XCODE_PATH
             clang++ --version
-            if [[ -f "build.py" ]]; then 
-              python build.py;
-            else
-              bincrafters-package-tools --auto;
-            fi
+            bincrafters-package-tools --auto
           env:
             CONAN_LOGIN_USERNAME: ${{ parameters.conanLoginUsername }}
             CONAN_PASSWORD: ${{ parameters.conanPassword }}
@@ -141,23 +134,8 @@ stages:
         timeoutInMinutes: 180
         steps:
         - task: UsePythonVersion@0
-          condition: ne(variables.CONAN_VISUAL_VERSIONS, 14)
           inputs:
             versionSpec: ${{ parameters.pythonVersion }}
-        - task: PowerShell@2
-          condition: eq(variables.CONAN_VISUAL_VERSIONS, 14)
-          inputs:
-            targetType: inline
-            script: |
-              Invoke-WebRequest https://aka.ms/nugetclidl -OutFile C:\nuget.exe
-              C:\nuget.exe install python -Version ${{ parameters.pythonVersion }} -ExcludeVersion -OutputDirectory C:\
-              Invoke-WebRequest -OutFile get-pip.py https://bootstrap.pypa.io/get-pip.py
-              C:\python\tools\python.exe get-pip.py
-              Write-Host "##vso[task.prependpath]C:\python\tools"
-              Write-Host "##vso[task.prependpath]C:\python\tools\Scripts"
-              Remove-Item C:\nuget.exe
-              Remove-Item get-pip.py
-          displayName: UsePythonVersion for VS 2015
         - powershell: |
             $delete = $(
               Start-Process -PassThru -NoNewWindow cmd.exe '/c rmdir /S /Q "C:\ProgramData\chocolatey"';
@@ -186,12 +164,8 @@ stages:
             Start-Process -Wait -NoNewWindow cmd.exe '/c conan user'
           displayName: Install Conan
         - powershell: |
-            if (($env:CONAN_VISUAL_VERSIONS -eq 14) -And ('${{ parameters.requireMoreDiskSpace }}' -eq 'true')) {
-              Write-Host "requireMoreDiskSpace is True - Delete Java stack for more disk space"
-              Start-Process -NoNewWindow cmd.exe "/c (del /f/s/q C:\java\ > nul) && (rmdir /S /Q C:\java\)" 
-            }
-            if (($env:CONAN_VISUAL_VERSIONS -ne 14) -And ('${{ parameters.requireMoreDiskSpace }}' -eq 'true')) {
-              Write-Host "requireMoreDiskSpace is True - Delete Java stack for more disk space"
+            if ('${{ parameters.requireMoreDiskSpace }}' -eq 'true') {
+              Write-Host "requireMoreDiskSpace is True - Delete Java and Dodnet stacks for more disk space"
               Start-Process -NoNewWindow cmd.exe '/c (del /f/s/q "C:\Program Files\Java" > nul) && (rmdir /S /Q "C:\Program Files\Java")'
               Start-Process -NoNewWindow cmd.exe '/c (del /f/s/q "C:\Program Files\dotnet\sdk\" > nul) && (rmdir /S /Q "C:\Program Files\dotnet\sdk\")' 
             }
