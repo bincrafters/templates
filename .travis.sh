@@ -24,9 +24,10 @@ cd ..
 
 # Copy generic files to tmp dir
 cp -v "conandata.yml" "${tmpdir}"
+cp -v ".editorconfig" "${tmpdir}"
 cp -rv ".github" "${tmpdir}"
-cp -rv ".gitignore" "${tmpdir}"
-cp -rv ".gitattributes" "${tmpdir}"
+cp -v ".gitignore" "${tmpdir}"
+cp -v ".gitattributes" "${tmpdir}"
 
 # Move specific files to tmp dir
 cp -rv "${template}/." "${tmpdir}"
