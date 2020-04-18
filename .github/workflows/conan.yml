@@ -1,4 +1,4 @@
-# bincrafters-conventions:gha-workflow-version:5
+# bincrafters-conventions:gha-workflow-version:6
 # You can add custom environment variables above the version tag
 # Do not modify the tag or anything below the tag
 # This script gets automatically updated
@@ -28,6 +28,8 @@ jobs:
           conan user
       - name: Generate Job Matrix
         id: set-matrix
+        env:
+          splitByBuildTypes: ${{ env.splitByBuildTypes }}
         run: |
           MATRIX=$(bincrafters-package-tools generate-ci-jobs --platform gha)
           echo "${MATRIX}"
