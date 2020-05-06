@@ -13,7 +13,7 @@ parameters:
     default: 10
   - name: pythonVersion
     type: string
-    default: "3.7.6"
+    default: "3.7.x"
   - name: enableVsBuilds
     type: boolean
     default: true
@@ -102,7 +102,7 @@ stages:
             CONAN_LOGIN_USERNAME: ${{ parameters.conanLoginUsername }}
             CONAN_PASSWORD: ${{ parameters.conanPassword }}
           displayName: Run
-        
+
         strategy:
           maxParallel: ${{ parameters.jobsMaxParallel }}
           matrix:
@@ -167,7 +167,7 @@ stages:
             if ('${{ parameters.requireMoreDiskSpace }}' -eq 'true') {
               Write-Host "requireMoreDiskSpace is True - Delete Java and Dodnet stacks for more disk space"
               Start-Process -NoNewWindow cmd.exe '/c (del /f/s/q "C:\Program Files\Java" > nul) && (rmdir /S /Q "C:\Program Files\Java")'
-              Start-Process -NoNewWindow cmd.exe '/c (del /f/s/q "C:\Program Files\dotnet\sdk\" > nul) && (rmdir /S /Q "C:\Program Files\dotnet\sdk\")' 
+              Start-Process -NoNewWindow cmd.exe '/c (del /f/s/q "C:\Program Files\dotnet\sdk\" > nul) && (rmdir /S /Q "C:\Program Files\dotnet\sdk\")'
             }
             if ('${{ parameters.collectionsProvideAsPythonRequires.path }}' -ne '') {
               conan export ${{ parameters.collectionsProvideAsPythonRequires.path }} ${{ parameters.collectionsProvideAsPythonRequires.reference }}
