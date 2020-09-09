@@ -2,7 +2,7 @@
 
 This repository contains "templates" for Git repositories hosting 3rdParty Conan recipes and related files for setting up Continuous Integration services and GitHub. Please report questions or problems here:
 
-https://github.com/bincrafters/community/issues/new  
+https://github.com/bincrafters/community/issues/new
 
 
 ## Getting Files
@@ -20,9 +20,9 @@ alternatively, you can clone these repositories and manually copy all the files 
 ## Adapt The Template
 Thoroughly review the following files, and edit any lines necessary:
   1. `README.md` - Find/Replace `package_name` with your actual package name (3 places)
-  2. `conandata.yml` - Replace version, download url and the SHA256 checksum ([explanation](https://github.com/conan-io/conan-center-index/wiki#the-conandatayml))
+  2. `conandata.yml` - Replace version, download url and the SHA256 checksum ([explanation](https://github.com/conan-io/conan-center-index/blob/master/docs/how_to_add_packages.md#the-conandatayml))
   3. `conanfile.py` - Virtually every line may need editing
-  4. `test_package/` - Write a test case
+  4. `test_package/` - Write a minimal test case
   5. Test your recipe locally by runnning e.g. `conan create . <libname>/<version>@` (notice the `@`)
   6. Create a git branch named `testing/<version>` and commit your work
 
