@@ -1,4 +1,4 @@
-# bincrafters-conventions:gha-workflow-version:6
+# bincrafters-conventions:gha-workflow-version:7
 # You can add custom environment variables above the version tag
 # Do not modify the tag or anything below the tag
 # This script gets automatically updated
@@ -14,7 +14,7 @@ on: [push, pull_request]
 jobs:
   generate-matrix:
     name: Generate Job Matrix
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
@@ -50,7 +50,7 @@ jobs:
         run: |
           pip install bincrafters_package_tools
           conan user
-          echo "::set-env name=CONAN_${{ matrix.config.compiler }}_VERSIONS::${{ matrix.config.version }}"
+          echo "CONAN_${{ matrix.config.compiler }}_VERSIONS=${{ matrix.config.version }}" >> $GITHUB_ENV
           echo "export CONAN_${{ matrix.config.compiler }}_VERSIONS=${{ matrix.config.version }}"
           compiler="${{ matrix.config.compiler }}"
           version="${{ matrix.config.version }}"
@@ -61,12 +61,12 @@ jobs:
               version_withoutdot="${version//./}"
               docker_image="conanio/${compiler_lower}${version_withoutdot}"
             fi
-            echo "::set-env name=CONAN_DOCKER_IMAGE::${docker_image}"
+            echo "CONAN_DOCKER_IMAGE=${docker_image}" >> $GITHUB_ENV
             echo "export CONAN_DOCKER_IMAGE=${docker_image}"
           fi
           build_type="${{ matrix.config.buildType }}"
           if ! [[ "${build_type}" == "" ]]; then
-            echo "::set-env name=CONAN_BUILD_TYPES::${build_type}"
+            echo "CONAN_BUILD_TYPES=${build_type}" >> $GITHUB_ENV
             echo "export CONAN_BUILD_TYPES=${build_type}"
           fi
           if [[ "${compiler}" == "APPLE_CLANG" ]] && [[ "${version}" == "11.0" ]]; then
