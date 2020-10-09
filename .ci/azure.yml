@@ -25,7 +25,7 @@ parameters:
     default: false
   - name: appleClangVersions
     type: string
-    default: "10,11"  # Possible values: any combination of "10", "11"
+    default: "10,11"  # Possible values: any combination of "9.1", "10", "11"
   - name: splitByBuildTypes
     type: string
     default: "false"  # Possible values: "false", "true"
