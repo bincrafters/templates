@@ -63,7 +63,7 @@ parameters:
     type: object
     default:
       - version: 9.1
-        image: macOS-10.13
+        image: macOS-10.14
         path: /Applications/Xcode_9.4.1.app
       - version: 10.0
         image: macOS-10.14
