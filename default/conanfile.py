@@ -5,7 +5,7 @@ import os
 class LibnameConan(ConanFile):
     name = "libname"
     description = "Keep it short"
-    topics = ("conan", "libname", "logging")
+    topics = ("libname", "logging", "debugging")
     url = "https://github.com/bincrafters/conan-libname"
     homepage = "https://github.com/original_author/original_lib"
     license = "MIT"  # Indicates license type of the packaged library; please use SPDX Identifiers https://spdx.org/licenses/
