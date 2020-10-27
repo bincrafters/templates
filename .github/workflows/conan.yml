@@ -1,4 +1,4 @@
-# bincrafters-conventions:gha-workflow-version:7
+# bincrafters-conventions:gha-workflow-version:8
 # You can add custom environment variables above the version tag
 # Do not modify the tag or anything below the tag
 # This script gets automatically updated
@@ -47,32 +47,13 @@ jobs:
         with:
           python-version: "3.8"
       - name: Install Conan
+        env:
+          BPT_MATRIX: ${{toJson(matrix.config)}}
         run: |
           pip install bincrafters_package_tools
-          conan user
-          echo "CONAN_${{ matrix.config.compiler }}_VERSIONS=${{ matrix.config.version }}" >> $GITHUB_ENV
-          echo "export CONAN_${{ matrix.config.compiler }}_VERSIONS=${{ matrix.config.version }}"
-          compiler="${{ matrix.config.compiler }}"
-          version="${{ matrix.config.version }}"
-          docker_image="${{ matrix.config.dockerImage }}"
-          if [[ "${compiler}" == "GCC" ]] || [[ "${compiler}" == "CLANG" ]]; then
-            if [[ "${docker_image}" == "" ]]; then
-              compiler_lower="${compiler,,}"
-              version_withoutdot="${version//./}"
-              docker_image="conanio/${compiler_lower}${version_withoutdot}"
-            fi
-            echo "CONAN_DOCKER_IMAGE=${docker_image}" >> $GITHUB_ENV
-            echo "export CONAN_DOCKER_IMAGE=${docker_image}"
-          fi
-          build_type="${{ matrix.config.buildType }}"
-          if ! [[ "${build_type}" == "" ]]; then
-            echo "CONAN_BUILD_TYPES=${build_type}" >> $GITHUB_ENV
-            echo "export CONAN_BUILD_TYPES=${build_type}"
-          fi
-          if [[ "${compiler}" == "APPLE_CLANG" ]] && [[ "${version}" == "11.0" ]]; then
-            sudo xcode-select -switch "/Applications/Xcode_11.3.1.app"
-            clang++ --version
-          fi
+          # remove newlines from matrix first
+          matrix=$(echo ${BPT_MATRIX})
+          bincrafters-package-tools prepare-env --platform gha --config "${matrix}"
         shell: bash
       - name: Run
         env:
