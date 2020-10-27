@@ -12,7 +12,7 @@ class LibnameConan(ConanFile):
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
 
-    settings = "os", "arch", "compiler"
+    settings = "os", "arch", "compiler", "build_type"
 
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
