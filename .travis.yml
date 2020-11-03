@@ -3,7 +3,7 @@ language: generic
 
 branches:
   only:
-    - master
+    - main
     - ci
 
 env:
