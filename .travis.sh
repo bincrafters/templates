@@ -43,7 +43,7 @@ git config user.name ${GITHUB_BOT_NAME}
 git config user.email ${GITHUB_BOT_EMAIL}
 
 # Check if repository is new
-git checkout master || git checkout -b master
+git checkout main || git checkout -b main
 
 TARGET_REPOSITORY="https://github.com/bincrafters/template-${template}"
 TOKEN_REPO=${TARGET_REPOSITORY/github.com/$GITHUB_BOT_NAME:$GITHUB_TOKEN@github.com}
@@ -53,4 +53,4 @@ git add -A .
 git commit -am "Automatic update from central templates repository for ${template}" || true
 
 # Push changes
-git push ${TOKEN_REPO} || git push -u origin master ${TOKEN_REPO}
+git push ${TOKEN_REPO} || git push -u origin main ${TOKEN_REPO}
