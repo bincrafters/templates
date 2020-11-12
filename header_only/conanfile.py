@@ -11,6 +11,8 @@ class LibnameConan(ConanFile):
     license = "MIT"  # Indicates license type of the packaged library; please use SPDX Identifiers https://spdx.org/licenses/
     no_copy_source = True
 
+    settings = "os", "arch", "compiler", "build_type"
+    
     _source_subfolder = "source_subfolder"
 
     def source(self):
