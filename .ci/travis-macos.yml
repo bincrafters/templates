@@ -151,4 +151,4 @@ matrix:
       env: CONAN_APPLE_CLANG_VERSIONS=11.0 CONAN_BUILD_TYPES=Release CONAN_CURRENT_PAGE=2
       if: env(splitByBuildTypes) = "true" AND env(CONAN_TOTAL_PAGES) = "2"
 
-import: .ci/internal/travis-steps.yml
+import: bincrafters/templates:.ci/internal/travis-steps.yml@12f4883f65fcbc521d7425636083ce9bba4be5cd

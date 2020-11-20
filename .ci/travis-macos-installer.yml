@@ -9,4 +9,4 @@ matrix:
       osx_image: xcode10.3
       env: CONAN_APPLE_CLANG_VERSIONS=10.0 ARCH=x86_64
 
-import: .ci/internal/travis-steps.yml
+import: bincrafters/templates:.ci/internal/travis-steps.yml@12f4883f65fcbc521d7425636083ce9bba4be5cd
