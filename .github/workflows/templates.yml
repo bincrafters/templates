@@ -1,0 +1,26 @@
+name: "deploy singular templates"
+
+on:
+  push:
+    branches: ["main", "ci"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        template: ["default", "header_only", "installer_only"]
+    name: Deploy to template-${{ matrix.template }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Deploy"
+        shell: bash
+        env:
+          TEMPLATE: ${{ matrix.template }}
+          BOT_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+          BOT_GITHUB_NAME: ${{ secrets.BOT_GITHUB_NAME }}
+          BOT_GITHUB_EMAIL: ${{ secrets.BOT_GITHUB_EMAIL }}
+        run: |
+          chmod +x .ci/deploy.sh
+          source .ci/deploy.sh
