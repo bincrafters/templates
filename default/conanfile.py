@@ -20,13 +20,12 @@ class LibnameConan(ConanFile):
     _build_subfolder = "build_subfolder"
     _cmake = None
 
-    requires = (
-        "zlib/1.2.11"
-    )
-
     def config_options(self):
         if self.settings.os == "Windows":
             del self.options.fPIC
+
+    def requirements(self):
+        self.requires("zlib/1.2.11")
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])

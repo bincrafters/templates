@@ -12,8 +12,11 @@ class LibnameConan(ConanFile):
     no_copy_source = True
 
     settings = "os", "arch", "compiler", "build_type"
-    
+
     _source_subfolder = "source_subfolder"
+
+    def package_id(self):
+        self.info.header_only()
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])
@@ -24,6 +27,3 @@ class LibnameConan(ConanFile):
         include_folder = os.path.join(self._source_subfolder, "include")
         self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
         self.copy(pattern="*", dst="include", src=include_folder)
-
-    def package_id(self):
-        self.info.header_only()

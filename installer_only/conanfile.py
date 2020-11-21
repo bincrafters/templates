@@ -18,6 +18,9 @@ class LibnameConan(ConanFile):
     _build_subfolder = "build_subfolder"
     _cmake = None
 
+    def package_id(self):
+        del self.info.settings.compiler
+
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])
         extracted_dir = self.name + "-" + self.version
@@ -42,9 +45,6 @@ class LibnameConan(ConanFile):
         # If so, you can just remove the lines below
         self.copy(pattern="tool_name", dst="bin", keep_path=False)
         self.copy(pattern="tool_name.exe", dst="bin", keep_path=False)
-
-    def package_id(self):
-        del self.info.settings.compiler
 
     def package_info(self):
         bindir = os.path.join(self.package_folder, "bin")
