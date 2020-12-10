@@ -10,3 +10,27 @@ matrix:
       env: CONAN_APPLE_CLANG_VERSIONS=10.0 ARCH=x86_64
 
 import: .ci/internal/travis-steps.yml
+
+after_sucess: |
+  echo ""
+  echo ""
+  echo ""
+  echo "------- DEPRECATED -------"
+  echo ""
+  echo "YOU SHOULD MIGRATE AWAY FROM RELYING ON THIS SCRIPT"
+  echo ""
+  echo "You can use our Azure Pipelines configuration for macOS builds of Conan packages"
+  echo ""
+  echo "If you want to continue to use Travis, change your import either to"
+  echo ""
+  echo "import: bincrafters/templates:.ci/travis-macos-installer.yml@12f4883f65fcbc521d7425636083ce9bba4be5cd"
+  echo ""
+  echo "or directly copy the configure scripts into your own."
+  echo ""
+  echo "We are going to delete this config file eventually. And your script will stop working."
+  echo ""
+  echo "For the moment, we let this jop fail artificial in order for you to notice this."
+  echo ""
+  echo "If your build job came that far it means that it succeeded."
+  echo ""
+  exit 1
