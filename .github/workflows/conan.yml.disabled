@@ -1,4 +1,4 @@
-# bincrafters-conventions:gha-workflow-version:8
+# bincrafters-conventions:gha-workflow-version:9
 # You can add custom environment variables above the version tag
 # Do not modify the tag or anything below the tag
 # This script gets automatically updated
@@ -11,6 +11,8 @@
 
 on: [push, pull_request]
 
+name: conan
+
 jobs:
   generate-matrix:
     name: Generate Job Matrix
@@ -19,6 +21,8 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: "0"
       - uses: actions/setup-python@v1
         with:
           python-version: "3.8"
@@ -43,6 +47,8 @@ jobs:
     name: ${{ matrix.config.name }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: "0"
       - uses: actions/setup-python@v1
         with:
           python-version: "3.8"
