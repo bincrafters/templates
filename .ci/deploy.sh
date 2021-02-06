@@ -31,7 +31,7 @@ cp -v ".gitignore" "${tmpdir}"
 cp -v ".gitattributes" "${tmpdir}"
 
 # Move specific files to tmp dir
-cp -rv "${TEMPLATE}/." "${tmpdir}"
+cp -rv "recipes/${TEMPLATE}/." "${tmpdir}"
 
 cd "${tmpdir}"
 
