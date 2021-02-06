@@ -25,7 +25,6 @@ cd ..
 # Copy generic files to tmp dir
 cp -v "conandata.yml" "${tmpdir}"
 cp -v ".editorconfig" "${tmpdir}"
-cp -v --parents ".github/settings.yml" "${tmpdir}"
 cp -v --parents ".github/workflows/conan.yml.disabled" "${tmpdir}"
 mv "${tmpdir}/.github/workflows/conan.yml.disabled" "${tmpdir}/.github/workflows/conan.yml"
 cp -v ".gitignore" "${tmpdir}"
