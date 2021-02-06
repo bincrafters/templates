@@ -13,8 +13,6 @@
 ####
 ####     We are going to delete this config file eventually. And your script will stop working.
 ####
-####     FIXME: TODO: for the next phasing-out step: Add a new build job which outputs this information and always fails.
-####
 
 osx: &osx
   os: osx
