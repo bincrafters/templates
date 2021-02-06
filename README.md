@@ -8,7 +8,7 @@ https://github.com/bincrafters/community/issues/new
 ## Getting Files
 
 Click on the following link to directly create a new GitHub repository with our templates:
-  * [Generate new repository]](https://github.com/bincrafters/template/generate)
+  * [Generate new repository](https://github.com/bincrafters/template/generate)
 
 alternatively, you can clone this repository and manually copy all the files to a new repository.
 
