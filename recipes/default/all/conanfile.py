@@ -1,6 +1,8 @@
 from conans import ConanFile, CMake, tools
 import os
 
+required_conan_version = ">=1.28.0"
+
 
 class LibnameConan(ConanFile):
     name = "libname"
