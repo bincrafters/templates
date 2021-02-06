@@ -1,30 +1,34 @@
-## Summary
+# Templates for Conan
 
-This repository contains "templates" for Git repositories hosting 3rdParty Conan recipes and related files for setting up Continuous Integration services and GitHub. Please report questions or problems here:
+This repository contains "templates" for Git repositories hosting Conan recipes and related files for setting up Continuous Integration services and GitHub. Please report questions or problems here:
 
 https://github.com/bincrafters/community/issues/new
 
 
 ## Getting Files
-To get the templates you can use GitHub's templates feature or copy the files manually.
 
-### Via GitHub Templates
-Click on the following links to directly create new GitHub repositories with our templates:
-  * [default](https://github.com/bincrafters/template-default/generate) - Used for typical packages ([repository](https://github.com/bincrafters/template-default))
-  * [header_only](https://github.com/bincrafters/template-header_only/generate) - Used for header-only packages ([repository](https://github.com/bincrafters/template-header_only))
-  * [installer_only](https://github.com/bincrafters/template-installer_only/generate) - Used for tools installers ([repository](https://github.com/bincrafters/template-installer_only))
+Click on the following link to directly create a new GitHub repository with our templates:
+  * [Generate new repository]](https://github.com/bincrafters/template/generate)
 
-alternatively, you can clone these repositories and manually copy all the files to a new repository.
+alternatively, you can clone this repository and manually copy all the files to a new repository.
 
 
 ## Adapt The Template
+
 Thoroughly review the following files, and edit any lines necessary:
-  1. `README.md` - Find/Replace `package_name` with your actual package name (3 places)
-  2. `conandata.yml` - Replace version, download url and the SHA256 checksum ([explanation](https://github.com/conan-io/conan-center-index/blob/master/docs/how_to_add_packages.md#the-conandatayml))
-  3. `conanfile.py` - Virtually every line may need editing
-  4. `test_package/` - Write a minimal test case
-  5. Test your recipe locally by runnning e.g. `conan create . <libname>/<version>@` (notice the `@`)
-  6. Create a git branch named `testing/<version>` and commit your work
+  1. Choose the right folder in `recipes/` - depending on the type of software you want to package - a regular library, a header-only project or an executable/installer-only project
+  2. Rename the respective folder to the name of your new package (e.g. rename `default` to `sdl`) - delete the other unused folders
+  3. Now edit the files in your new folder as described in the following steps
+  4. `config.yml` - Replace the version
+  5. `conandata.yml` - Replace version, download url and the SHA256 checksum ([explanation](https://github.com/conan-io/conan-center-index/blob/master/docs/how_to_add_packages.md#the-conandatayml))
+  6. `conanfile.py` - Virtually every line may need editing
+  7. `test_package/` - Write a minimal test case
+  8. Test your recipe locally by running e.g. `conan create . <libname>/<version>@<your-name>/stable`
+  9. `README.md` - You probably want to edit this Readme to tell your users what they can find in your repository
+  10. Commit your work to git
+
+If you want to add more Conan recipes in the future, copy the fitting `recipes/` subfolder again in your repository and repeat the steps above. You can have an arbitrary amount of recipes in a single repository.
+
 
 ## Maintaining Templates
 
