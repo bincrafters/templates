@@ -11,12 +11,18 @@ parameters:
   - name: pythonVersion
     type: string
     default: "3.8.x"
+  - name: bptConfigFileVersion
+    type: number
+    values:
+      - 2
 
 jobs:
 - job: generatematrix
   displayName: " Generate Job Matrix"
   pool:
     vmImage: ubuntu-20.04
+  variables:
+    BPT_CONFIG_FILE_VERSION: ${{ parameters.bptConfigFileVersion }}
   steps:
   - task: UsePythonVersion@0
     inputs:
@@ -36,6 +42,7 @@ jobs:
   timeoutInMinutes: 120
   variables:
     BPT_MATRIX: $[ dependencies.generatematrix.outputs['gen.matrix'] ]
+    BPT_CONFIG_FILE_VERSION: ${{ parameters.bptConfigFileVersion }}
   steps:
   - task: UsePythonVersion@0
     inputs:
