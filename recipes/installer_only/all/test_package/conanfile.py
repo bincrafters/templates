@@ -2,8 +2,8 @@ from conans import ConanFile, tools
 
 class TestPackageConan(ConanFile):
 
-    settings = "os", "os_build"
+    settings = "os", "arch"
 
     def test(self):
-        if not tools.cross_building(self.settings):
+        if not tools.cross_building(self):
             self.run("some_tool --version")
