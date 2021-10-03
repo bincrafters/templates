@@ -7,7 +7,7 @@ on: [push, pull_request]
 #
 # Possible configurations:
 # env:
-#   BPT_SPLIT_BY_BUILD_TYPES: "false"  # Possible values "false", "true", default: false
+#   BPT_MATRIX_SPLIT_BY_BUILD_TYPES: "false"  # Possible values "false", "true", default: false
 #
 # You can furthermore set any environment variable understood by Conan and Conan Package Tools
 #
