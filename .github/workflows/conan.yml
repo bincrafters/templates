@@ -1,6 +1,6 @@
 on: [push, pull_request]
 
-# bincrafters-conventions:gha-workflow-version:11
+# bincrafters-conventions:gha-workflow-version:12
 # You can add custom environment variables above the version tag
 # Do not modify the tag or anything below the tag
 # This script gets automatically updated
@@ -23,7 +23,7 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     env:
-      BPT_CONFIG_FILE_VERSION: "11"
+      BPT_CONFIG_FILE_VERSION: "12"
     steps:
       - uses: actions/checkout@v2
         with:
@@ -49,7 +49,7 @@ jobs:
       matrix: ${{fromJson(needs.generate-matrix.outputs.matrix)}}
     name: ${{ matrix.config.name }}
     env:
-      BPT_CONFIG_FILE_VERSION: "11"
+      BPT_CONFIG_FILE_VERSION: "12"
     steps:
       - uses: actions/checkout@v2
         with:
@@ -72,3 +72,11 @@ jobs:
           CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
         run: |
           bincrafters-package-tools --auto
+  finished:
+    needs: conan
+    runs-on: ubuntu-20.04
+    name: "All GitHub Actions Jobs Finished"
+    steps:
+      - name: Finish
+        run: |
+          echo "All GitHub Actions jobs finished"
