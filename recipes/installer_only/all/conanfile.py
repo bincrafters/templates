@@ -18,7 +18,6 @@ class LibnameConan(ConanFile):
 
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
-    _cmake = None
 
     def package_id(self):
         del self.info.settings.compiler
@@ -26,12 +25,11 @@ class LibnameConan(ConanFile):
     def source(self):
         tools.get(**self.conan_data["sources"][self.version], strip_root=True, destination=self._source_subfolder)
 
+    @functools.lru_cache(1)
     def _configure_cmake(self):
-        if not self._cmake:
-            self._cmake = CMake(self)
-            self._cmake.definitions["BUILD_TESTS"] = False  # example
-            self._cmake.configure(build_folder=self._build_subfolder)
-        return self._cmake
+        self._cmake = CMake(self)
+        self._cmake.definitions["BUILD_TESTS"] = False  # example
+        self._cmake.configure(build_folder=self._build_subfolder)
 
     def build(self):
         cmake = self._configure_cmake()
