@@ -1,5 +1,6 @@
 from conans import ConanFile, CMake, tools
 import os
+import functools
 
 required_conan_version = ">=1.33.0"
 
@@ -37,9 +38,10 @@ class LibnameConan(ConanFile):
 
     @functools.lru_cache(1)
     def _configure_cmake(self):
-        self._cmake = CMake(self)
-        self._cmake.definitions["BUILD_TESTS"] = False  # example
-        self._cmake.configure(build_folder=self._build_subfolder)
+        cmake = CMake(self)
+        cmake.definitions["BUILD_TESTS"] = False  # example
+        cmake.configure(build_folder=self._build_subfolder)
+        return cmake
 
     def build(self):
         cmake = self._configure_cmake()
